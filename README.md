@@ -101,6 +101,36 @@ The application includes an in-depth diagnostic HUD and inspection sidebar:
 
 ---
 
+## 🔬 Controlled Evaluation & Experiments Framework (P0 Evaluation)
+
+The application features a scientific benchmarking suite designed to directly answer:
+> *"How does fuzzy-logic decision making affect NPC behavior compared with alternative AI decision architectures?"*
+
+### Features:
+- **5 Standardized Benchmark Scenarios**:
+  1. `open_arena`: Wide open plain testing pure pursuit, reaction velocity, and evasive stamina.
+  2. `obstacle_arena`: Scattered tactical crate barriers testing whisker steering & raycast navigation.
+  3. `corridors`: Narrow choke passages evaluating corner entrapment and pathfinding recovery.
+  4. `low_health`: Spawns NPC at $25\%$ HP with player at $100\%$ HP, testing self-preservation decisions under mortal threat.
+  5. `healing_shrines`: Dual health shrines testing spatial navigation and contestation over medical resources.
+- **Automated Deterministic Benchmark Opponent**:
+  - Replaces human player variation with an automated benchmark agent (kiting at optimal range, deterministic shockwave EMP defenses, and obstacle avoidance).
+  - Guarantees 100% identical test conditions across every trial and AI system.
+- **Two Execution Modes**:
+  - **⚡ Accelerated**: Runs micro-tick batches headless in seconds without freezing the UI.
+  - **👁 Visual 1x**: Steps in real-time so researchers can visually observe tactical navigation decisions.
+- **Metrics Tracked**:
+  - Survival time (seconds, mean $\pm$ std)
+  - Damage dealt to player
+  - Damage received by NPC
+  - Attack contacts & retreat decisions
+  - Cumulative distance travelled
+  - Win / Loss / Draw percentages
+- **Direct CSV Data Export**:
+  - Click **Export Raw Trial Data (CSV)** to download structured `.csv` records ready for statistical analysis in Python, Pandas, Matplotlib, or R.
+
+---
+
 ## 📂 Project Structure
 
 ```

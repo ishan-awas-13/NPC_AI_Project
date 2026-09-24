@@ -207,6 +207,122 @@ export interface DebugVisualSettings {
   showCrateBounds: boolean;
   showHealthBars: boolean;
   showDetectionRadius: boolean;
+  showPerformanceGraph: boolean;
+}
+
+export interface AlgorithmCostMetric {
+  aiType: AIType;
+  name: string;
+  color: string;
+  currentMs: number;
+  avgMs: number;
+  minMs: number;
+  maxMs: number;
+  activeCount: number;
+  relativeRatio: number;
+  complexityNote: string;
+}
+
+export interface ProfilerFrameSample {
+  timestamp: number;
+  frameTimeMs: number;
+  cpuWorkloadMs: number;
+  totalAITimeMs: number;
+  algorithmTimes: Record<AIType, number>;
+  fps: number;
+}
+
+export interface BenchmarkResult {
+  aiType: AIType;
+  name: string;
+  color: string;
+  meanUs: number;
+  minUs: number;
+  maxUs: number;
+  stdUs: number;
+  relativeRatio: number;
+  iterations: number;
+  complexityNote: string;
 }
 
 export type CratePreset = 'tactical' | 'pillars' | 'corridors' | 'scattered';
+
+export type ExperimentScenarioId =
+  | 'open_arena'
+  | 'obstacle_arena'
+  | 'corridors'
+  | 'low_health'
+  | 'healing_shrines';
+
+export interface ExperimentScenarioConfig {
+  id: ExperimentScenarioId;
+  name: string;
+  description: string;
+  purpose: string;
+  cratePreset?: CratePreset;
+  customCrates?: Crate[];
+  healStations: HealingStation[];
+  npcStartPos: Vector2;
+  playerStartPos: Vector2;
+  npcInitialHealth: number;
+  playerInitialHealth: number;
+  timeLimitSec: number;
+}
+
+export interface TrialResult {
+  experimentId: string;
+  trialNumber: number;
+  aiType: AIType;
+  aiLabel: string;
+  scenarioId: string;
+  scenarioName: string;
+  seed: number;
+  survivalTime: number;
+  damageDealt: number;
+  damageReceived: number;
+  npcWon: boolean;
+  playerWon: boolean;
+  attacks: number;
+  retreats: number;
+  distanceTravelled: number;
+  duration: number;
+  finalNpcHealth: number;
+  finalPlayerHealth: number;
+  outcome: 'NPC Win' | 'Player Win' | 'Timeout (Draw)';
+  timestamp: number;
+}
+
+export interface AggregatedAIMetrics {
+  aiType: AIType;
+  aiLabel: string;
+  trialCount: number;
+  meanSurvivalTime: number;
+  stdSurvivalTime: number;
+  meanDamageDealt: number;
+  stdDamageDealt: number;
+  meanDamageReceived: number;
+  stdDamageReceived: number;
+  meanAttacks: number;
+  stdAttacks: number;
+  meanRetreats: number;
+  stdRetreats: number;
+  meanDistanceTravelled: number;
+  stdDistanceTravelled: number;
+  npcWinRate: number;
+  playerWinRate: number;
+  drawRate: number;
+}
+
+export interface ExperimentRun {
+  id: string;
+  timestamp: number;
+  scenarioId: ExperimentScenarioId;
+  scenarioName: string;
+  aiType: AIType | 'all';
+  trialsPerAI: number;
+  totalTrials: number;
+  completedTrials: number;
+  results: TrialResult[];
+  aggregates: Record<AIType, AggregatedAIMetrics | null>;
+  status: 'idle' | 'running' | 'completed' | 'cancelled';
+}

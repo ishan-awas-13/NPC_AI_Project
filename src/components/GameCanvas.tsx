@@ -7,6 +7,7 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 import { GameEngine } from '../game/GameEngine';
 import { DebugVisualSettings, NPC } from '../types';
+import { PerformanceGraph } from './PerformanceGraph';
 
 interface GameCanvasProps {
   engine: GameEngine;
@@ -100,6 +101,8 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
     let lastTime = performance.now();
 
     const render = (time: number) => {
+      const frameStartCpu = performance.now();
+      const frameInterval = time - lastTime;
       const dt = (time - lastTime) / 1000;
       lastTime = time;
 
@@ -121,6 +124,9 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
         }
       }
 
+      const frameWorkloadTime = performance.now() - frameStartCpu;
+      engine.profiler.endFrame(frameInterval > 0 ? frameInterval : 16.6, frameWorkloadTime);
+
       animationFrameId = requestAnimationFrame(render);
     };
 
@@ -140,6 +146,11 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
         onClick={handleCanvasClick}
         className="w-full h-full block"
       />
+
+      {/* Real-time frame time and AI processing load telemetry graph in bottom corner */}
+      {debugSettings.showPerformanceGraph && (
+        <PerformanceGraph engine={engine} />
+      )}
     </div>
   );
 };

@@ -10,6 +10,8 @@ import { GameCanvas } from './components/GameCanvas';
 import { ControlsToolbar } from './components/ControlsToolbar';
 import { GameHUD } from './components/GameHUD';
 import { AIDebugPanel } from './components/AIDebugPanel';
+import { ExperimentManager } from './game/ExperimentManager';
+import { ExperimentView } from './components/ExperimentView';
 import { DebugVisualSettings, CratePreset, AIType } from './types';
 import {
   BrainCircuit,
@@ -20,10 +22,15 @@ import {
   ChevronRight,
   Shield,
   Zap,
+  Gamepad2,
+  FlaskConical,
 } from 'lucide-react';
 
 export default function App() {
   const engine = useMemo(() => new GameEngine(1000, 680), []);
+  const experimentManager = useMemo(() => new ExperimentManager(engine), [engine]);
+
+  const [mainTab, setMainTab] = useState<'sandbox' | 'experiments'>('sandbox');
 
   const [debugSettings, setDebugSettings] = useState<DebugVisualSettings>({
     showRaycasts: true,
@@ -33,6 +40,7 @@ export default function App() {
     showCrateBounds: true,
     showHealthBars: true,
     showDetectionRadius: false,
+    showPerformanceGraph: true,
   });
 
   const [selectedNpcId, setSelectedNpcId] = useState<string | null>(engine.selectedNpcId);
@@ -111,95 +119,140 @@ export default function App() {
           </div>
         </div>
 
+        {/* Top View Mode Navigation Tabs */}
+        <div className="flex items-center bg-slate-800/80 p-1 rounded-lg border border-slate-700/80">
+          <button
+            id="tab-sandbox-btn"
+            onClick={() => {
+              if (engine.isExperimentMode) {
+                engine.endExperimentMode();
+              }
+              setMainTab('sandbox');
+            }}
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              mainTab === 'sandbox'
+                ? 'bg-cyan-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Gamepad2 className="w-3.5 h-3.5" />
+            <span>Interactive Arena</span>
+          </button>
+          <button
+            id="tab-experiments-btn"
+            onClick={() => setMainTab('experiments')}
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              mainTab === 'experiments'
+                ? 'bg-cyan-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <FlaskConical className="w-3.5 h-3.5 text-cyan-300" />
+            <span>Evaluation & Experiments</span>
+          </button>
+        </div>
+
         {/* Algorithm Legend Pill Badges */}
-        <div className="hidden lg:flex items-center gap-3 text-xs">
+        <div className="hidden xl:flex items-center gap-2 text-xs">
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/40 text-cyan-300">
-            <span className="w-2.5 h-2.5 rounded-sm bg-cyan-400" />
-            <span className="font-medium">Fuzzy AI Logic</span>
+            <span className="w-2 h-2 rounded-sm bg-cyan-400" />
+            <span className="font-medium">Fuzzy AI</span>
           </div>
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-950/60 border border-purple-500/40 text-purple-300">
-            <span className="w-2.5 h-2.5 rounded-sm bg-purple-400" />
+            <span className="w-2 h-2 rounded-sm bg-purple-400" />
             <span className="font-medium">Behavior Tree</span>
           </div>
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-950/60 border border-amber-500/40 text-amber-300">
-            <span className="w-2.5 h-2.5 rounded-sm bg-amber-400" />
-            <span className="font-medium">Simple Decision</span>
-          </div>
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-emerald-300">
-            <span className="w-2.5 h-2.5 rounded-sm bg-emerald-400" />
-            <span className="font-medium">Player Box</span>
+            <span className="w-2 h-2 rounded-sm bg-amber-400" />
+            <span className="font-medium">Simple FSM</span>
           </div>
         </div>
 
         {/* Mobile Toggle for Inspector Panel */}
         <div className="flex lg:hidden items-center gap-2">
-          <button
-            id="mobile-inspector-toggle-btn"
-            onClick={() => setShowMobilePanel(!showMobilePanel)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 border transition-all ${
-              showMobilePanel
-                ? 'bg-cyan-600 border-cyan-500 text-white'
-                : 'bg-slate-800 border-slate-700 text-slate-300'
-            }`}
-          >
-            <Sliders className="w-3.5 h-3.5" />
-            {showMobilePanel ? 'Hide AI Panel' : 'Inspect AI'}
-          </button>
+          {mainTab === 'sandbox' && (
+            <button
+              id="mobile-inspector-toggle-btn"
+              onClick={() => setShowMobilePanel(!showMobilePanel)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 border transition-all ${
+                showMobilePanel
+                  ? 'bg-cyan-600 border-cyan-500 text-white'
+                  : 'bg-slate-800 border-slate-700 text-slate-300'
+              }`}
+            >
+              <Sliders className="w-3.5 h-3.5" />
+              {showMobilePanel ? 'Hide AI Panel' : 'Inspect AI'}
+            </button>
+          )}
         </div>
       </header>
 
-      {/* Controls & Spawners Toolbar */}
-      <ControlsToolbar
-        engine={engine}
-        debugSettings={debugSettings}
-        setDebugSettings={setDebugSettings}
-        onSpawnNPC={handleSpawnNPC}
-        onRemoveNPCType={handleRemoveNPCType}
-        onReset={handleReset}
-        onDamageAll={handleDamageAll}
-        onTriggerPulse={handleTriggerPulse}
-        onSelectPreset={handleSelectPreset}
-      />
-
-      {/* Main Simulation View & Docked Inspector Panel */}
-      <div className="flex-1 flex overflow-hidden relative">
-        {/* Left/Main Simulation Arena */}
-        <div className="flex-1 relative flex flex-col h-full bg-slate-950 overflow-hidden">
-          <GameCanvas
+      {mainTab === 'sandbox' ? (
+        <>
+          {/* Controls & Spawners Toolbar */}
+          <ControlsToolbar
             engine={engine}
             debugSettings={debugSettings}
-            selectedNpcId={selectedNpcId}
-            onSelectNPC={handleSelectNpc}
-          />
-          <GameHUD
-            engine={engine}
+            setDebugSettings={setDebugSettings}
+            onSpawnNPC={handleSpawnNPC}
+            onRemoveNPCType={handleRemoveNPCType}
+            onReset={handleReset}
+            onDamageAll={handleDamageAll}
             onTriggerPulse={handleTriggerPulse}
-            onRestart={handleReset}
+            onSelectPreset={handleSelectPreset}
+            onOpenExperiments={() => setMainTab('experiments')}
           />
-        </div>
 
-        {/* Right Docked AI Inspector Panel (Desktop) */}
-        <div className="hidden lg:block w-96 shrink-0 h-full border-l border-slate-800 z-10">
-          <AIDebugPanel
-            engine={engine}
-            selectedNpc={selectedNpc}
-            onSelectNpc={handleSelectNpc}
-            onDamageNpc={handleDamageNpc}
-          />
-        </div>
+          {/* Main Simulation View & Docked Inspector Panel */}
+          <div className="flex-1 flex overflow-hidden relative">
+            {/* Left/Main Simulation Arena */}
+            <div className="flex-1 relative flex flex-col h-full bg-slate-950 overflow-hidden">
+              <GameCanvas
+                engine={engine}
+                debugSettings={debugSettings}
+                selectedNpcId={selectedNpcId}
+                onSelectNPC={handleSelectNpc}
+              />
+              <GameHUD
+                engine={engine}
+                onTriggerPulse={handleTriggerPulse}
+                onRestart={handleReset}
+              />
+            </div>
 
-        {/* Mobile Slide-Over AI Inspector Panel */}
-        {showMobilePanel && (
-          <div className="lg:hidden absolute inset-y-0 right-0 w-80 max-w-[90vw] z-30 shadow-2xl">
-            <AIDebugPanel
-              engine={engine}
-              selectedNpc={selectedNpc}
-              onSelectNpc={handleSelectNpc}
-              onDamageNpc={handleDamageNpc}
-            />
+            {/* Right Docked AI Inspector Panel (Desktop) */}
+            <div className="hidden lg:block w-96 shrink-0 h-full border-l border-slate-800 z-10">
+              <AIDebugPanel
+                engine={engine}
+                selectedNpc={selectedNpc}
+                onSelectNpc={handleSelectNpc}
+                onDamageNpc={handleDamageNpc}
+              />
+            </div>
+
+            {/* Mobile Slide-Over AI Inspector Panel */}
+            {showMobilePanel && (
+              <div className="lg:hidden absolute inset-y-0 right-0 w-80 max-w-[90vw] z-30 shadow-2xl">
+                <AIDebugPanel
+                  engine={engine}
+                  selectedNpc={selectedNpc}
+                  onSelectNpc={handleSelectNpc}
+                  onDamageNpc={handleDamageNpc}
+                />
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </>
+      ) : (
+        /* Evaluation & Experiments Dashboard */
+        <ExperimentView
+          engine={engine}
+          experimentManager={experimentManager}
+          debugSettings={debugSettings}
+          selectedNpcId={selectedNpcId}
+          onSelectNPC={handleSelectNpc}
+        />
+      )}
     </div>
   );
 }

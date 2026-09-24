@@ -16,6 +16,8 @@ import {
   AIType,
   RaySensor,
   CratePreset,
+  ExperimentScenarioConfig,
+  TrialResult,
 } from '../types';
 import { Math2D } from '../utils/math';
 import { FuzzySteeringEngine } from '../ai/fuzzy';
@@ -24,6 +26,8 @@ import { SimpleDecisionEngine } from '../ai/simpleLogic';
 import { GOAPSteeringEngine } from '../ai/goap';
 import { UtilityAIEngine } from '../ai/utility';
 import { getMapLayout } from './mapLayouts';
+import { TrialMetricsTracker } from './TrialMetricsCollector';
+import { PerformanceProfiler } from './PerformanceProfiler';
 
 export class GameEngine {
   public width: number;
@@ -36,6 +40,9 @@ export class GameEngine {
   public pulseWaves: PulseWaveEffect[] = [];
   public damageNumbers: DamageNumber[] = [];
   public particles: ParticleEffect[] = [];
+
+  // Real-time AI Performance Profiler
+  public profiler: PerformanceProfiler = new PerformanceProfiler();
 
   // Behavior Tree instances mapped by NPC ID
   private btInstances: Map<string, BTNode> = new Map();
@@ -50,6 +57,13 @@ export class GameEngine {
   public isPaused = false;
   public timeScale = 1.0;
   public currentPreset: CratePreset = 'tactical';
+
+  // Controlled Experiment State
+  public isExperimentMode = false;
+  public activeTrialTracker: TrialMetricsTracker | null = null;
+  public trialTimeLimit = 35;
+  public onTrialComplete?: (result: TrialResult) => void;
+  public activeScenarioConfig: ExperimentScenarioConfig | null = null;
 
   // Input states
   private keysDown: Set<string> = new Set();
@@ -332,8 +346,12 @@ export class GameEngine {
       const dist = Math2D.dist({ x: px, y: py }, { x: npc.x, y: npc.y });
       if (dist < pulseRadius) {
         const damage = Math.round(35 * (1 - dist / (pulseRadius * 1.2)));
-        npc.health = Math.max(1, npc.health - damage);
+        npc.health = Math.max(0, npc.health - damage);
         npc.lastDamageTime = this.survivalTime;
+
+        if (this.activeTrialTracker && npc.id === this.npcs[0]?.id) {
+          this.activeTrialTracker.recordDamageReceived(damage);
+        }
 
         // Radial knockback force
         const knockDir = Math2D.normalize({ x: npc.x - px, y: npc.y - py });
@@ -362,6 +380,7 @@ export class GameEngine {
 
   public update(rawDt: number) {
     if (this.isPaused || this.isGameOver) return;
+    this.profiler.startFrame();
 
     // Cap delta time to prevent tunneling on frame drops
     const dt = Math.min(0.05, rawDt) * this.timeScale;
@@ -375,11 +394,13 @@ export class GameEngine {
       this.player.damageFlash = Math.max(0, this.player.damageFlash - dt);
     }
 
-    // Health orb spawner
-    this.orbSpawnTimer -= dt;
-    if (this.orbSpawnTimer <= 0) {
-      this.spawnHealthOrb();
-      this.orbSpawnTimer = 4.5;
+    // Health orb spawner (interactive sandbox only)
+    if (!this.isExperimentMode) {
+      this.orbSpawnTimer -= dt;
+      if (this.orbSpawnTimer <= 0) {
+        this.spawnHealthOrb();
+        this.orbSpawnTimer = 4.5;
+      }
     }
 
     // 1. Update Player Movement
@@ -389,13 +410,65 @@ export class GameEngine {
     this.updateNPCs(dt);
 
     // 3. Update Health Orbs & Pickup
-    this.updateHealthOrbs();
+    if (!this.isExperimentMode) {
+      this.updateHealthOrbs();
+    }
 
     // 4. Update Visual Effects (Pulses, Damage Numbers, Particles)
     this.updateVisualEffects(dt);
+
+    // 5. Experiment Trial Step & Termination Evaluation
+    if (this.isExperimentMode && this.activeTrialTracker && this.npcs.length > 0) {
+      const testNpc = this.npcs[0];
+      const isRetreat =
+        testNpc.isHealing ||
+        testNpc.isExhausted ||
+        testNpc.debugData.stateBadge.includes('Tired') ||
+        testNpc.debugData.stateBadge.includes('Retreat') ||
+        testNpc.debugData.stateBadge.includes('Flee') ||
+        testNpc.debugData.stateBadge.includes('Stand-off') ||
+        testNpc.debugData.fuzzy?.defuzzifiedGoal === 'RETREAT & HEAL' ||
+        (testNpc.debugData.behaviorTree?.currentAction.toLowerCase().includes('heal') ?? false) ||
+        (testNpc.debugData.behaviorTree?.currentAction.toLowerCase().includes('breath') ?? false) ||
+        (testNpc.debugData.goap?.currentActionName.toLowerCase().includes('heal') ?? false) ||
+        (testNpc.debugData.utility?.selectedAction.toLowerCase().includes('heal') ?? false) ||
+        testNpc.debugData.simple?.currentState === 'FLEE_TO_HEAL' ||
+        testNpc.debugData.simple?.currentState === 'EXHAUSTED_STANDOFF';
+
+      const pDist = Math2D.dist({ x: testNpc.x, y: testNpc.y }, { x: this.player.x, y: this.player.y });
+      const minCombatDist = (testNpc.size + this.player.size) / 2;
+      const isMeleeContact = pDist <= minCombatDist + 5;
+
+      this.activeTrialTracker.onStep(
+        dt,
+        { x: testNpc.x, y: testNpc.y },
+        testNpc.health,
+        this.player.health,
+        isRetreat,
+        isMeleeContact
+      );
+
+      const isTimeout = this.survivalTime >= this.trialTimeLimit;
+      const isNpcDead = testNpc.health <= 0;
+      const isPlayerDead = this.player.health <= 0;
+
+      if (isTimeout || isNpcDead || isPlayerDead) {
+        const reason = isPlayerDead ? 'player_death' : isNpcDead ? 'npc_death' : 'timeout';
+        const result = this.activeTrialTracker.finalize(reason);
+        this.activeTrialTracker = null;
+        if (this.onTrialComplete) {
+          this.onTrialComplete(result);
+        }
+      }
+    }
   }
 
   private updatePlayer(dt: number) {
+    if (this.isExperimentMode) {
+      this.updateAutomatedPlayer(dt);
+      return;
+    }
+
     let moveX = 0;
     let moveY = 0;
 
@@ -489,6 +562,8 @@ export class GameEngine {
       let targetPt: Vector2 = playerPos;
       let badge = '';
 
+      const aiStartTime = performance.now();
+
       if (npc.aiType === 'fuzzy') {
         const result = FuzzySteeringEngine.evaluate(
           npc,
@@ -575,6 +650,9 @@ export class GameEngine {
         badge = result.badge;
         npc.debugData.simple = result.debug;
       }
+
+      const aiElapsed = performance.now() - aiStartTime;
+      this.profiler.recordAIEvaluation(npc.aiType, aiElapsed);
 
       // Flocking separation: proactively repels NPCs from each other to prevent clustering/conga lines
       const separationRadius = 52;
@@ -725,6 +803,10 @@ export class GameEngine {
         this.player.health = Math.max(0, this.player.health - dmg);
         this.player.damageFlash = 0.2;
 
+        if (this.activeTrialTracker && npc.id === this.npcs[0]?.id) {
+          this.activeTrialTracker.recordDamageDealt(dmg);
+        }
+
         // Push away slightly
         const pushDir = Math2D.normalize({ x: this.player.x - npc.x, y: this.player.y - npc.y });
         this.player.x += pushDir.x * 25 * dt;
@@ -832,6 +914,9 @@ export class GameEngine {
         npc.y = Math2D.clamp(npc.y, halfSize, this.height - halfSize);
       }
     }
+
+    // Maintain live background calibration for algorithms not currently active in arena
+    this.profiler.performBackgroundCalibration(this);
   }
 
   private updateSensors(npc: NPC) {
@@ -989,5 +1074,181 @@ export class GameEngine {
         color,
       });
     }
+  }
+
+  /**
+   * Deterministic automated benchmark player for controlled evaluation trials.
+   * Ensures that all 5 AI architectures face the exact identical opponent behavior,
+   * kiting dynamics, and pulse shockwave defenses.
+   */
+  private updateAutomatedPlayer(dt: number) {
+    if (this.npcs.length === 0) return;
+    const targetNpc = this.npcs[0];
+    const distToNpc = Math2D.dist({ x: this.player.x, y: this.player.y }, { x: targetNpc.x, y: targetNpc.y });
+
+    // 1. Tactical pulse shockwave defense:
+    // If NPC gets within 135px and pulse cooldown is ready, blast them
+    if (distToNpc < 135 && this.player.pulseCooldown <= 0) {
+      this.triggerPlayerPulse();
+    }
+
+    // 2. Deterministic steering movement:
+    // The player maintains a tactical spacing (approx 180px away), maneuvering around obstacles
+    let moveDir: Vector2 = { x: 0, y: 0 };
+
+    if (distToNpc < 190) {
+      // Kite away from NPC
+      const awayDir = Math2D.normalize({ x: this.player.x - targetNpc.x, y: this.player.y - targetNpc.y });
+      // Add slight perpendicular orbital tangent to avoid getting cornered against walls
+      const tangent = { x: -awayDir.y, y: awayDir.x };
+      moveDir = Math2D.normalize({
+        x: awayDir.x * 0.75 + tangent.x * 0.45,
+        y: awayDir.y * 0.75 + tangent.y * 0.45,
+      });
+    } else if (distToNpc > 340) {
+      // Advance cautiously back toward engagement zone
+      const towardDir = Math2D.normalize({ x: targetNpc.x - this.player.x, y: targetNpc.y - this.player.y });
+      moveDir = towardDir;
+    } else {
+      // Orbit / strafe at optimal combat range
+      const toNpc = Math2D.normalize({ x: targetNpc.x - this.player.x, y: targetNpc.y - this.player.y });
+      moveDir = { x: -toNpc.y, y: toNpc.x };
+    }
+
+    // Boundary repulsion to prevent the player bot from hugging perimeter walls
+    const boundMargin = 70;
+    if (this.player.x < boundMargin) moveDir.x += 1.5;
+    if (this.player.x > this.width - boundMargin) moveDir.x -= 1.5;
+    if (this.player.y < boundMargin) moveDir.y += 1.5;
+    if (this.player.y > this.height - boundMargin) moveDir.y -= 1.5;
+
+    // Obstacle avoidance for player bot against crates
+    for (const crate of this.crates) {
+      const cCenter = { x: crate.x + crate.width / 2, y: crate.y + crate.height / 2 };
+      const dCrate = Math2D.dist({ x: this.player.x, y: this.player.y }, cCenter);
+      const safeRadius = Math.max(crate.width, crate.height) * 0.75 + 30;
+      if (dCrate < safeRadius) {
+        const pushAway = Math2D.normalize({ x: this.player.x - cCenter.x, y: this.player.y - cCenter.y });
+        moveDir = Math2D.add(moveDir, Math2D.scale(pushAway, 1.8));
+      }
+    }
+
+    moveDir = Math2D.normalize(moveDir);
+
+    const accel = 800;
+    const friction = 6.5;
+
+    this.player.vx += moveDir.x * accel * dt;
+    this.player.vy += moveDir.y * accel * dt;
+
+    this.player.vx -= this.player.vx * friction * dt;
+    this.player.vy -= this.player.vy * friction * dt;
+
+    const currentSpeed = Math2D.length({ x: this.player.vx, y: this.player.vy });
+    const maxSpeed = this.player.maxSpeed * 0.88;
+    if (currentSpeed > maxSpeed) {
+      const scaled = Math2D.scale({ x: this.player.vx, y: this.player.vy }, maxSpeed / currentSpeed);
+      this.player.vx = scaled.x;
+      this.player.vy = scaled.y;
+    }
+
+    this.player.x += this.player.vx * dt;
+    this.player.y += this.player.vy * dt;
+
+    if (currentSpeed > 10) {
+      this.player.rotation = Math.atan2(this.player.vy, this.player.vx);
+    }
+
+    // Box vs crate collisions
+    const pHalf = this.player.size / 2;
+    for (const crate of this.crates) {
+      const resolved = Math2D.resolveBoxCollision({ x: this.player.x, y: this.player.y }, pHalf, crate);
+      this.player.x = resolved.x;
+      this.player.y = resolved.y;
+    }
+
+    this.player.x = Math2D.clamp(this.player.x, pHalf, this.width - pHalf);
+    this.player.y = Math2D.clamp(this.player.y, pHalf, this.height - pHalf);
+  }
+
+  /**
+   * Sets up a controlled experimental trial with deterministic initial state.
+   */
+  public setupExperimentTrial(
+    scenario: ExperimentScenarioConfig,
+    aiType: AIType,
+    experimentId: string,
+    trialNumber: number,
+    seed: number
+  ) {
+    this.isExperimentMode = true;
+    this.activeScenarioConfig = scenario;
+    this.trialTimeLimit = scenario.timeLimitSec;
+    this.survivalTime = 0;
+    this.isGameOver = false;
+    this.isPaused = false;
+    this.pulseWaves = [];
+    this.damageNumbers = [];
+    this.particles = [];
+    this.healthOrbs = [];
+
+    // Set scenario obstacles and shrines
+    if (scenario.customCrates) {
+      this.crates = scenario.customCrates.map((c) => ({ ...c }));
+    } else if (scenario.cratePreset) {
+      this.loadPreset(scenario.cratePreset);
+    } else {
+      this.crates = [];
+    }
+    this.healStations = scenario.healStations.map((h) => ({ ...h }));
+
+    // Set player starting state
+    this.player.x = scenario.playerStartPos.x;
+    this.player.y = scenario.playerStartPos.y;
+    this.player.vx = 0;
+    this.player.vy = 0;
+    this.player.health = scenario.playerInitialHealth;
+    this.player.maxHealth = 100;
+    this.player.pulseCooldown = 0;
+    this.player.damageFlash = 0;
+
+    // Clear NPCs and spawn only 1 test NPC
+    this.npcs = [];
+    this.btInstances.clear();
+    GOAPSteeringEngine.clearMemory();
+    UtilityAIEngine.clearMemory();
+
+    const npc = this.spawnNPC(aiType, { ...scenario.npcStartPos });
+    npc.health = scenario.npcInitialHealth;
+    this.selectedNpcId = npc.id;
+
+    // Initialize trial tracker
+    this.activeTrialTracker = new TrialMetricsTracker(
+      experimentId,
+      trialNumber,
+      aiType,
+      npc.name,
+      scenario.id,
+      scenario.name,
+      seed,
+      scenario.timeLimitSec
+    );
+  }
+
+  /**
+   * Cleans up experiment mode and restores the interactive sandbox.
+   */
+  public endExperimentMode() {
+    this.isExperimentMode = false;
+    this.activeTrialTracker = null;
+    this.activeScenarioConfig = null;
+    this.resetGame();
+  }
+
+  /**
+   * Fast-forward step for headless or accelerated simulation execution.
+   */
+  public stepFixed(dt = 1 / 60) {
+    this.update(dt);
   }
 }
