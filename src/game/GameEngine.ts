@@ -683,8 +683,8 @@ export class GameEngine {
         badge.includes('Pounce') ||
         badge.includes('Charge') ||
         badge.includes('Intercept') ||
-        (badge.includes('Chase') && distToPlayer < 260) ||
-        (badge.includes('Flank') && distToPlayer < 200);
+        (badge.includes('Chase') && distToPlayer < 150) || // Reduced distance from 260 to 150 for stamina drain
+        (badge.includes('Flank') && distToPlayer < 150); // Reduced distance from 200 to 150 for stamina drain
 
       if (isAggressiveAction && !npc.isExhausted) {
         // Drain stamina over ~4 seconds
