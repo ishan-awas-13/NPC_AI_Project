@@ -15,6 +15,7 @@ import {
 } from '../types';
 import { getExperimentScenario } from './experimentScenarios';
 import { computeAggregates, exportTrialsToCSV, downloadCSV } from './TrialMetricsCollector';
+import { BackendClient } from '../api/backendClient';
 
 export type ExperimentSpeed = 'fast' | 'realtime';
 
@@ -82,60 +83,91 @@ export class ExperimentManager {
     this.notify();
 
     try {
-      let completedSoFar = 0;
+      // Trigger accelerated headless benchmark run on Python backend
+      const backendAiList = aiList.map((a) => (a === 'simple' ? 'fsm' : a));
+      await BackendClient.startBenchmark(config.scenarioId, config.trialsPerAI, backendAiList);
 
-      for (const currentAi of aiList) {
-        if (this.cancelRequested) break;
+      // Poll benchmark status from backend until finished
+      while (this.isRunning && !this.cancelRequested) {
+        await new Promise((r) => setTimeout(r, 200));
+        const st = await BackendClient.getBenchmarkStatus();
 
-        for (let trialIdx = 1; trialIdx <= config.trialsPerAI; trialIdx++) {
-          if (this.cancelRequested) break;
-
-          completedSoFar++;
-          if (this.onProgress) {
-            const aiLabel = this.getAILabel(currentAi);
-            this.onProgress(completedSoFar, totalTrials, `${aiLabel} (Trial ${trialIdx}/${config.trialsPerAI})`);
-          }
-
-          // Deterministic seed generation based on trial index
-          const seed = 100000 + trialIdx * 37;
-
-          const trialResult = await this.runSingleTrial(
-            scenario,
-            currentAi,
-            experimentId,
-            trialIdx,
-            seed,
-            config.speed
-          );
-
-          if (this.cancelRequested) break;
-
-          newRun.results.push(trialResult);
-          newRun.completedTrials = newRun.results.length;
-
-          // Recompute aggregates for this AI
-          const aiTrials = newRun.results.filter((r) => r.aiType === currentAi);
-          newRun.aggregates[currentAi] = computeAggregates(
-            currentAi,
-            this.getAILabel(currentAi),
-            aiTrials
-          );
-
+        if (this.onProgress && st.progress) {
+          this.onProgress(st.progress.completed, st.progress.total, st.progress.current);
+          newRun.completedTrials = st.progress.completed;
           this.notify();
+        }
+
+        if (!st.isRunning && st.hasResult) {
+          const backendData = await BackendClient.getBenchmarkResults();
+          if (backendData) {
+            newRun.results = backendData.results.map((r: any) => ({
+              experimentId: r.experimentId || r.experiment_id,
+              trialNumber: r.trialNumber || r.trial_number,
+              aiType: r.aiType === 'fsm' ? 'simple' : r.aiType,
+              aiLabel: r.aiLabel || r.ai_label,
+              scenarioId: r.scenarioId || r.scenario_id,
+              scenarioName: r.scenarioName || r.scenario_name,
+              seed: r.seed,
+              survivalTime: r.survivalTime ?? r.survival_time,
+              damageDealt: r.damageDealt ?? r.damage_dealt,
+              damageReceived: r.damageReceived ?? r.damage_received,
+              npcWon: r.npcWon ?? r.npc_won,
+              playerWon: r.playerWon ?? r.player_won,
+              attacks: r.attacks,
+              retreats: r.retreats,
+              distanceTravelled: r.distanceTravelled ?? r.distance_travelled,
+              duration: r.survivalTime ?? r.survival_time,
+              finalNpcHealth: r.finalNpcHealth ?? r.final_npc_health,
+              finalPlayerHealth: r.finalPlayerHealth ?? r.final_player_health,
+              outcome: r.outcome,
+              timestamp: r.timestamp,
+            }));
+
+            if (backendData.aggregates) {
+              for (const [key, agg] of Object.entries<any>(backendData.aggregates)) {
+                const targetKey = (key === 'fsm' ? 'simple' : key) as AIType;
+                newRun.aggregates[targetKey] = {
+                  aiType: targetKey,
+                  aiLabel: agg.aiLabel || agg.ai_label,
+                  trialCount: agg.trialCount ?? agg.trial_count,
+                  meanSurvivalTime: agg.meanSurvivalTime ?? agg.mean_survival_time,
+                  stdSurvivalTime: agg.stdSurvivalTime ?? agg.std_survival_time,
+                  meanDamageDealt: agg.meanDamageDealt ?? agg.mean_damage_dealt,
+                  stdDamageDealt: agg.stdDamageDealt ?? agg.std_damage_dealt,
+                  meanDamageReceived: agg.meanDamageReceived ?? agg.mean_damage_received,
+                  stdDamageReceived: agg.stdDamageReceived ?? agg.std_damage_received,
+                  meanAttacks: agg.meanAttacks ?? agg.mean_attacks,
+                  stdAttacks: agg.stdAttacks ?? agg.std_attacks,
+                  meanRetreats: agg.meanRetreats ?? agg.mean_retreats,
+                  stdRetreats: agg.stdRetreats ?? agg.std_retreats,
+                  meanDistanceTravelled: agg.meanDistanceTravelled ?? agg.mean_distance_travelled,
+                  stdDistanceTravelled: agg.stdDistanceTravelled ?? agg.std_distance_travelled,
+                  npcWinRate: agg.npcWinRate ?? agg.npc_win_rate,
+                  playerWinRate: agg.playerWinRate ?? agg.player_win_rate,
+                  drawRate: agg.drawRate ?? agg.draw_rate,
+                };
+              }
+            }
+
+            newRun.completedTrials = newRun.results.length;
+            newRun.status = 'completed';
+          }
+          break;
         }
       }
 
-      newRun.status = this.cancelRequested ? 'cancelled' : 'completed';
+      if (this.cancelRequested) {
+        newRun.status = 'cancelled';
+      }
     } catch (err) {
-      console.error('Experiment execution error:', err);
+      console.error('Experiment execution error via Python backend:', err);
       newRun.status = 'cancelled';
     } finally {
       this.isRunning = false;
       this.engine.endExperimentMode();
-
-      // Store in history
       if (newRun.results.length > 0) {
-        this.history = [newRun, ...this.history.slice(0, 19)]; // keep up to 20 runs
+        this.history = [newRun, ...this.history.slice(0, 19)];
       }
       this.notify();
     }
@@ -144,6 +176,7 @@ export class ExperimentManager {
   public cancelExperiment() {
     if (!this.isRunning) return;
     this.cancelRequested = true;
+    BackendClient.cancelBenchmark().catch(() => {});
     if (this.animationHandle !== null) {
       cancelAnimationFrame(this.animationHandle);
       this.animationHandle = null;

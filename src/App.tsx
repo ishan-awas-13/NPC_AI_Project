@@ -26,11 +26,15 @@ import {
   FlaskConical,
 } from 'lucide-react';
 
+import { BackendClient, BackendWebSocket } from './api/backendClient';
+
 export default function App() {
   const engine = useMemo(() => new GameEngine(1000, 680), []);
   const experimentManager = useMemo(() => new ExperimentManager(engine), [engine]);
+  const ws = useMemo(() => new BackendWebSocket(), []);
 
   const [mainTab, setMainTab] = useState<'sandbox' | 'experiments'>('sandbox');
+  const [isConnected, setIsConnected] = useState(false);
 
   const [debugSettings, setDebugSettings] = useState<DebugVisualSettings>({
     showRaycasts: true,
@@ -47,16 +51,71 @@ export default function App() {
   const [, setTick] = useState(0);
   const [showMobilePanel, setShowMobilePanel] = useState(false);
 
-  // Sync state with simulation tick for UI reactivity
+  // Initialize WebSocket connection to Python backend
   useEffect(() => {
-    const interval = setInterval(() => {
+    ws.onConnectionChange = (connected) => {
+      setIsConnected(connected);
+    };
+
+    ws.onStateUpdate = (state) => {
+      engine.syncFromBackendState(state);
       setTick((t) => (t + 1) % 1000);
-      if (engine.selectedNpcId !== selectedNpcId) {
+      if (engine.selectedNpcId && !selectedNpcId) {
         setSelectedNpcId(engine.selectedNpcId);
       }
-    }, 100);
-    return () => clearInterval(interval);
-  }, [engine, selectedNpcId]);
+    };
+
+    ws.connect();
+
+    // Start simulation in backend
+    BackendClient.controlSimulation('start').catch(() => {});
+
+    return () => {
+      ws.disconnect();
+    };
+  }, [engine, ws]);
+
+  // Keyboard navigation streaming to Python backend
+  useEffect(() => {
+    const keysDown = new Set<string>();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const k = e.key.toLowerCase();
+      keysDown.add(k);
+
+      if (e.code === 'Space') {
+        e.preventDefault();
+        ws.send({ type: 'trigger_pulse' });
+        return;
+      }
+
+      sendMovement();
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      const k = e.key.toLowerCase();
+      keysDown.delete(k);
+      sendMovement();
+    };
+
+    const sendMovement = () => {
+      let moveX = 0;
+      let moveY = 0;
+      if (keysDown.has('w') || keysDown.has('arrowup')) moveY -= 1;
+      if (keysDown.has('s') || keysDown.has('arrowdown')) moveY += 1;
+      if (keysDown.has('a') || keysDown.has('arrowleft')) moveX -= 1;
+      if (keysDown.has('d') || keysDown.has('arrowright')) moveX += 1;
+
+      ws.send({ type: 'player_input', move_x: moveX, move_y: moveY });
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [ws]);
 
   const selectedNpc = useMemo(() => {
     return engine.npcs.find((n) => n.id === selectedNpcId) || engine.npcs[0] || null;
@@ -68,34 +127,38 @@ export default function App() {
   };
 
   const handleSpawnNPC = (type: AIType) => {
-    const newNpc = engine.spawnNPC(type);
-    setSelectedNpcId(newNpc.id);
+    ws.send({ type: 'control', action: 'spawn_npc', ai_type: type === 'simple' ? 'fsm' : type });
   };
 
   const handleRemoveNPCType = (type: AIType) => {
-    engine.removeLastNPCOfType(type);
-    setSelectedNpcId(engine.selectedNpcId);
+    ws.send({ type: 'control', action: 'remove_npc', ai_type: type === 'simple' ? 'fsm' : type });
   };
 
   const handleReset = () => {
-    engine.resetGame();
-    setSelectedNpcId(engine.npcs[0]?.id || null);
+    ws.send({ type: 'control', action: 'reset' });
   };
 
   const handleDamageAll = () => {
-    engine.damageAllEnemies(45);
+    ws.send({ type: 'control', action: 'damage_all', amount: 45 });
   };
 
   const handleDamageNpc = (id: string) => {
-    engine.damageNPC(id, 40);
+    ws.send({ type: 'control', action: 'damage_npc', id, amount: 40 });
   };
 
   const handleTriggerPulse = () => {
-    engine.triggerPlayerPulse();
+    ws.send({ type: 'trigger_pulse' });
   };
 
   const handleSelectPreset = (preset: CratePreset) => {
-    engine.loadPreset(preset);
+    const scenarioMap: Record<string, string> = {
+      tactical: 'open_arena',
+      pillars: 'obstacle_arena',
+      corridors: 'corridors',
+      scattered: 'dynamic_crossfire',
+    };
+    const scId = scenarioMap[preset] || 'open_arena';
+    BackendClient.configureSimulation({ scenario_id: scId }).catch(console.error);
   };
 
   return (
@@ -111,6 +174,16 @@ export default function App() {
               <span>NPC Driving & Steering AI</span>
               <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-normal border border-slate-700 hidden sm:inline">
                 Top-Down Survival Demo
+              </span>
+              <span
+                className={`text-[11px] px-2 py-0.5 rounded-full font-mono flex items-center gap-1.5 border ${
+                  isConnected
+                    ? 'bg-emerald-950/80 border-emerald-500/50 text-emerald-400'
+                    : 'bg-rose-950/80 border-rose-500/50 text-rose-400 animate-pulse'
+                }`}
+              >
+                <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-emerald-400' : 'bg-rose-400'}`} />
+                {isConnected ? 'Python Backend Connected' : 'Connecting to Server...'}
               </span>
             </h1>
             <p className="text-[11px] text-slate-400 hidden sm:block">

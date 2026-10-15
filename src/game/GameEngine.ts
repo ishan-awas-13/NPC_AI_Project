@@ -378,7 +378,85 @@ export class GameEngine {
     this.mouseTarget = pos;
   }
 
+  public isBackendControlled = true;
+
+  public syncFromBackendState(data: any) {
+    if (!data) return;
+
+    if (data.survivalTime !== undefined) this.survivalTime = data.survivalTime;
+    if (data.isGameOver !== undefined) this.isGameOver = data.isGameOver;
+    if (data.isPaused !== undefined) this.isPaused = data.isPaused;
+
+    // Update Player
+    if (data.player) {
+      this.player.x = data.player.x;
+      this.player.y = data.player.y;
+      this.player.vx = data.player.vx;
+      this.player.vy = data.player.vy;
+      this.player.rotation = data.player.rotation;
+      this.player.health = data.player.health;
+      this.player.maxHealth = data.player.maxHealth;
+      this.player.pulseCooldown = data.player.pulseCooldown;
+      this.player.damageFlash = data.player.damageFlash;
+    }
+
+    // Update NPCs
+    if (Array.isArray(data.npcs)) {
+      this.npcs = data.npcs.map((nData: any) => {
+        // Map backend NPC format to frontend NPC model
+        const mappedNpc: NPC = {
+          id: nData.id,
+          aiType: nData.aiType,
+          name: nData.name,
+          color: nData.color,
+          accentColor: nData.accentColor,
+          x: nData.x,
+          y: nData.y,
+          vx: nData.vx,
+          vy: nData.vy,
+          rotation: nData.rotation,
+          size: nData.size,
+          health: nData.health,
+          maxHealth: nData.maxHealth,
+          maxSpeed: nData.maxSpeed,
+          maxForce: nData.maxForce || 420,
+          isHealing: nData.isHealing,
+          healingTimer: 0,
+          sensors: nData.sensors || [],
+          lastDamageTime: 0,
+          aggressionStamina: nData.aggressionStamina,
+          maxAggressionStamina: nData.maxAggressionStamina || 4.0,
+          isExhausted: nData.isExhausted,
+          debugData: nData.debugData || {},
+        };
+        return mappedNpc;
+      });
+
+      // Keep selected NPC valid
+      if (this.selectedNpcId && !this.npcs.some((n) => n.id === this.selectedNpcId)) {
+        this.selectedNpcId = this.npcs[0]?.id || null;
+      }
+    }
+
+    // Update Crates
+    if (Array.isArray(data.crates)) {
+      this.crates = data.crates;
+    }
+
+    // Update Heal Stations
+    if (Array.isArray(data.healStations)) {
+      this.healStations = data.healStations;
+    }
+  }
+
   public update(rawDt: number) {
+    if (this.isBackendControlled) {
+      // In backend-controlled mode, physics and AI are stepped by Python.
+      // Frontend updates visual effects only (pulses, particles, damage numbers)
+      this.updateVisualEffects(rawDt);
+      return;
+    }
+
     if (this.isPaused || this.isGameOver) return;
     this.profiler.startFrame();
 
