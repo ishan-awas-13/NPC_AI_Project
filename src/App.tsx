@@ -58,6 +58,7 @@ export default function App() {
     };
 
     ws.onStateUpdate = (state) => {
+      if (engine.isExperimentMode) return;
       engine.syncFromBackendState(state);
       setTick((t) => (t + 1) % 1000);
       if (engine.selectedNpcId && !selectedNpcId) {
@@ -135,6 +136,7 @@ export default function App() {
   };
 
   const handleReset = () => {
+    engine.isGameOver = false;
     ws.send({ type: 'control', action: 'reset' });
   };
 
@@ -151,14 +153,8 @@ export default function App() {
   };
 
   const handleSelectPreset = (preset: CratePreset) => {
-    const scenarioMap: Record<string, string> = {
-      tactical: 'open_arena',
-      pillars: 'obstacle_arena',
-      corridors: 'corridors',
-      scattered: 'dynamic_crossfire',
-    };
-    const scId = scenarioMap[preset] || 'open_arena';
-    BackendClient.configureSimulation({ scenario_id: scId }).catch(console.error);
+    engine.currentPreset = preset;
+    BackendClient.configureSimulation({ preset, scenario_id: preset }).catch(console.error);
   };
 
   return (

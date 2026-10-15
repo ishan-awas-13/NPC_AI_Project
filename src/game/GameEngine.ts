@@ -403,11 +403,21 @@ export class GameEngine {
     // Update NPCs
     if (Array.isArray(data.npcs)) {
       this.npcs = data.npcs.map((nData: any) => {
+        const rawAiType = nData.aiType;
+        const aiType = (rawAiType === 'fsm' ? 'simple' : rawAiType) as AIType;
+        const debugData = { ...(nData.debugData || {}) };
+        if (debugData.behavior_tree && !debugData.behaviorTree) {
+          debugData.behaviorTree = debugData.behavior_tree;
+        }
+        if (debugData.fsm && !debugData.simple) {
+          debugData.simple = debugData.fsm;
+        }
+
         // Map backend NPC format to frontend NPC model
         const mappedNpc: NPC = {
           id: nData.id,
-          aiType: nData.aiType,
-          name: nData.name,
+          aiType,
+          name: nData.name || (aiType === 'simple' ? 'Simple Decision AI' : `${aiType} AI`),
           color: nData.color,
           accentColor: nData.accentColor,
           x: nData.x,
@@ -427,7 +437,7 @@ export class GameEngine {
           aggressionStamina: nData.aggressionStamina,
           maxAggressionStamina: nData.maxAggressionStamina || 4.0,
           isExhausted: nData.isExhausted,
-          debugData: nData.debugData || {},
+          debugData,
         };
         return mappedNpc;
       });
@@ -450,7 +460,7 @@ export class GameEngine {
   }
 
   public update(rawDt: number) {
-    if (this.isBackendControlled) {
+    if (this.isBackendControlled && !this.isExperimentMode) {
       // In backend-controlled mode, physics and AI are stepped by Python.
       // Frontend updates visual effects only (pulses, particles, damage numbers)
       this.updateVisualEffects(rawDt);

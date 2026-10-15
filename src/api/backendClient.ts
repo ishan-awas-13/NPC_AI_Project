@@ -4,13 +4,13 @@
  */
 
 export const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
+  ((import.meta as any).env && (import.meta as any).env.VITE_API_URL) ||
   (typeof window !== 'undefined'
     ? `${window.location.protocol}//${window.location.hostname}:8001`
     : 'http://127.0.0.1:8001');
 
 export const WS_BASE_URL =
-  import.meta.env.VITE_WS_URL ||
+  ((import.meta as any).env && (import.meta as any).env.VITE_WS_URL) ||
   (typeof window !== 'undefined'
     ? `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.hostname}:8001`
     : 'ws://127.0.0.1:8001');
@@ -74,6 +74,7 @@ export class BackendClient {
 
   public static async configureSimulation(config: {
     scenario_id?: string;
+    preset?: string;
     width?: number;
     height?: number;
     npcs?: any[];
