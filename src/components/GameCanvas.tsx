@@ -41,8 +41,20 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
 
   useEffect(() => {
     handleResize();
+
+    const ro = new ResizeObserver(() => {
+      handleResize();
+    });
+
+    if (containerRef.current) {
+      ro.observe(containerRef.current);
+    }
+
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', handleResize);
+    };
   }, [handleResize]);
 
   // Handle canvas click to select NPC

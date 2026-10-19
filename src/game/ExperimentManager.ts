@@ -48,7 +48,8 @@ export class ExperimentManager {
     this.isRunning = true;
     this.cancelRequested = false;
 
-    const scenario = getExperimentScenario(config.scenarioId, this.engine.width, this.engine.height);
+    this.engine.activeScenarioId = config.scenarioId;
+    const initialScenario = getExperimentScenario(config.scenarioId, this.engine.width, this.engine.height);
 
     const aiList: AIType[] =
       config.aiType === 'all'
@@ -62,7 +63,7 @@ export class ExperimentManager {
       id: experimentId,
       timestamp: Date.now(),
       scenarioId: config.scenarioId,
-      scenarioName: scenario.name,
+      scenarioName: initialScenario.name,
       aiType: config.aiType,
       trialsPerAI: config.trialsPerAI,
       totalTrials,
@@ -98,6 +99,9 @@ export class ExperimentManager {
 
           // Deterministic seed generation based on trial index
           const seed = 100000 + trialIdx * 37;
+
+          // Fresh scenario configuration matching current engine width/height
+          const scenario = getExperimentScenario(config.scenarioId, this.engine.width, this.engine.height);
 
           const trialResult = await this.runSingleTrial(
             scenario,

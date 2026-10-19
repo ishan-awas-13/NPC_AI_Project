@@ -6,3 +6,23 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Presentation & Deck Generation Scripts
+*.pptx
+generate_deck.py
+
+# Local logs & benchmark exports
+logs/

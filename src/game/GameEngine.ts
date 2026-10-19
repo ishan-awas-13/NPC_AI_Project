@@ -17,8 +17,10 @@ import {
   RaySensor,
   CratePreset,
   ExperimentScenarioConfig,
+  ExperimentScenarioId,
   TrialResult,
 } from '../types';
+import { getExperimentScenario } from './experimentScenarios';
 import { Math2D } from '../utils/math';
 import { FuzzySteeringEngine } from '../ai/fuzzy';
 import { BTNode, createComplexMovementBehaviorTree, BTExecutionContext } from '../ai/behaviorTree';
@@ -64,6 +66,7 @@ export class GameEngine {
   public trialTimeLimit = 35;
   public onTrialComplete?: (result: TrialResult) => void;
   public activeScenarioConfig: ExperimentScenarioConfig | null = null;
+  public activeScenarioId: ExperimentScenarioId | null = null;
 
   // Input states
   private keysDown: Set<string> = new Set();
@@ -107,7 +110,26 @@ export class GameEngine {
     if (newWidth < 400 || newHeight < 300) return;
     this.width = newWidth;
     this.height = newHeight;
-    this.loadPreset(this.currentPreset);
+
+    if (this.isExperimentMode || this.activeScenarioId) {
+      const scenarioId = this.activeScenarioConfig?.id || this.activeScenarioId;
+      if (scenarioId) {
+        const scenario = getExperimentScenario(scenarioId, this.width, this.height);
+        this.activeScenarioConfig = scenario;
+        if (scenario.customCrates) {
+          this.crates = scenario.customCrates.map((c) => ({ ...c }));
+        } else if (scenario.cratePreset) {
+          const layout = getMapLayout(scenario.cratePreset, this.width, this.height);
+          this.crates = layout.crates;
+          this.healStations = layout.healStations;
+        } else {
+          this.crates = [];
+        }
+        this.healStations = scenario.healStations.map((h) => ({ ...h }));
+      }
+    } else {
+      this.loadPreset(this.currentPreset);
+    }
 
     // Keep entities in bounds
     this.player.x = Math2D.clamp(this.player.x, 30, this.width - 30);
@@ -116,6 +138,60 @@ export class GameEngine {
       npc.x = Math2D.clamp(npc.x, 30, this.width - 30);
       npc.y = Math2D.clamp(npc.y, 30, this.height - 30);
     }
+  }
+
+  /**
+   * Applies an experiment scenario map (obstacles, heal stations, and spawn conditions).
+   * If previewMode is true, resets entity positions and transient effects for visual inspection
+   * without launching experiment metrics tracking.
+   */
+  public applyExperimentScenario(scenarioId: ExperimentScenarioId, previewMode: boolean = false) {
+    this.activeScenarioId = scenarioId;
+    const scenario = getExperimentScenario(scenarioId, this.width, this.height);
+    this.activeScenarioConfig = scenario;
+
+    if (scenario.customCrates) {
+      this.crates = scenario.customCrates.map((c) => ({ ...c }));
+    } else if (scenario.cratePreset) {
+      const layout = getMapLayout(scenario.cratePreset, this.width, this.height);
+      this.crates = layout.crates;
+      this.healStations = layout.healStations;
+    } else {
+      this.crates = [];
+    }
+    this.healStations = scenario.healStations.map((h) => ({ ...h }));
+
+    if (previewMode && !this.isExperimentMode) {
+      this.player.x = scenario.playerStartPos.x;
+      this.player.y = scenario.playerStartPos.y;
+      this.player.vx = 0;
+      this.player.vy = 0;
+      this.player.health = scenario.playerInitialHealth;
+      this.player.damageFlash = 0;
+      this.player.pulseCooldown = 0;
+
+      this.pulseWaves = [];
+      this.damageNumbers = [];
+      this.particles = [];
+      this.healthOrbs = [];
+
+      for (const npc of this.npcs) {
+        npc.x = scenario.npcStartPos.x;
+        npc.y = scenario.npcStartPos.y;
+        npc.vx = 0;
+        npc.vy = 0;
+        npc.health = scenario.npcInitialHealth;
+      }
+    }
+  }
+
+  /**
+   * Clears any active experiment scenario preview and restores the sandbox preset.
+   */
+  public clearExperimentScenario() {
+    this.activeScenarioId = null;
+    this.activeScenarioConfig = null;
+    this.loadPreset(this.currentPreset);
   }
 
   public resetGame() {
@@ -1182,6 +1258,7 @@ export class GameEngine {
     seed: number
   ) {
     this.isExperimentMode = true;
+    this.activeScenarioId = scenario.id;
     this.activeScenarioConfig = scenario;
     this.trialTimeLimit = scenario.timeLimitSec;
     this.survivalTime = 0;
@@ -1196,7 +1273,9 @@ export class GameEngine {
     if (scenario.customCrates) {
       this.crates = scenario.customCrates.map((c) => ({ ...c }));
     } else if (scenario.cratePreset) {
-      this.loadPreset(scenario.cratePreset);
+      const layout = getMapLayout(scenario.cratePreset, this.width, this.height);
+      this.crates = layout.crates;
+      this.healStations = layout.healStations;
     } else {
       this.crates = [];
     }
@@ -1242,6 +1321,8 @@ export class GameEngine {
     this.isExperimentMode = false;
     this.activeTrialTracker = null;
     this.activeScenarioConfig = null;
+    this.activeScenarioId = null;
+    this.loadPreset(this.currentPreset);
     this.resetGame();
   }
 

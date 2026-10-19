@@ -103,16 +103,42 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
     };
   }, [experimentManager]);
 
+  // Synchronize scenario map immediately on mount & whenever selectedScenario changes
+  useEffect(() => {
+    if (!experimentManager.isRunning) {
+      engine.applyExperimentScenario(selectedScenario, true);
+    }
+  }, [engine, experimentManager.isRunning, selectedScenario]);
+
+  // Clean up scenario preview on unmount if experiment is not running
+  useEffect(() => {
+    return () => {
+      if (!engine.isExperimentMode) {
+        engine.clearExperimentScenario();
+      }
+    };
+  }, [engine]);
+
   const handleStart = () => {
     if (speed === 'realtime') {
       setHistoryTab('visual');
+      // Wait a frame for React to mount the visual canvas and establish container dimensions
+      requestAnimationFrame(() => {
+        experimentManager.startExperiment({
+          aiType: selectedAI,
+          scenarioId: selectedScenario,
+          trialsPerAI: trialCount,
+          speed,
+        });
+      });
+    } else {
+      experimentManager.startExperiment({
+        aiType: selectedAI,
+        scenarioId: selectedScenario,
+        trialsPerAI: trialCount,
+        speed,
+      });
     }
-    experimentManager.startExperiment({
-      aiType: selectedAI,
-      scenarioId: selectedScenario,
-      trialsPerAI: trialCount,
-      speed,
-    });
   };
 
   const handleCancel = () => {
@@ -178,7 +204,13 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
           <select
             id="experiment-scenario-select"
             value={selectedScenario}
-            onChange={(e) => setSelectedScenario(e.target.value as ExperimentScenarioId)}
+            onChange={(e) => {
+              const scId = e.target.value as ExperimentScenarioId;
+              setSelectedScenario(scId);
+              if (!experimentManager.isRunning) {
+                engine.applyExperimentScenario(scId, true);
+              }
+            }}
             disabled={isRunning}
             className="w-full bg-white border border-slate-300 rounded-md px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500 transition-colors disabled:opacity-50 shadow-2xs cursor-pointer"
           >
@@ -361,23 +393,21 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
         {/* Sub-Header Tabs */}
         <div className="h-11 shrink-0 bg-white border-b border-slate-200 px-4 flex items-center justify-between shadow-2xs">
           <div className="flex items-center gap-2">
-            {(isRunning && speed === 'realtime') || historyTab === 'visual' ? (
-              <button
-                id="tab-visual-arena-btn"
-                onClick={() => setHistoryTab('visual')}
-                className={`px-3 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-                  historyTab === 'visual'
-                    ? 'bg-slate-900 text-white shadow-2xs'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                }`}
-              >
-                <MonitorPlay className="w-3.5 h-3.5 text-indigo-500" />
-                <span>Live Arena View</span>
-                {isRunning && speed === 'realtime' && (
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse ml-0.5" />
-                )}
-              </button>
-            ) : null}
+            <button
+              id="tab-visual-arena-btn"
+              onClick={() => setHistoryTab('visual')}
+              className={`px-3 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                historyTab === 'visual'
+                  ? 'bg-slate-900 text-white shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+            >
+              <MonitorPlay className="w-3.5 h-3.5 text-indigo-500" />
+              <span>Live Arena View</span>
+              {isRunning && speed === 'realtime' && (
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse ml-0.5" />
+              )}
+            </button>
             <button
               id="tab-matrix-btn"
               onClick={() => setHistoryTab('matrix')}

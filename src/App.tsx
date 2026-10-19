@@ -126,6 +126,9 @@ export default function App() {
             onClick={() => {
               if (engine.isExperimentMode) {
                 engine.endExperimentMode();
+              } else {
+                engine.clearExperimentScenario();
+                engine.resetGame();
               }
               setMainTab('sandbox');
             }}
