@@ -122,6 +122,7 @@ async def configure_simulation(config: SimulationConfigRequest):
     custom_npcs = [npc.model_dump() for npc in config.npcs] if config.npcs else None
     snapshot = await sim_session.configure(
         scenario_id=config.scenario_id,
+        preset=config.preset,
         width=config.width,
         height=config.height,
         custom_npcs=custom_npcs,
@@ -251,6 +252,14 @@ async def simulation_websocket(websocket: WebSocket):
 
                 elif msg_type == "trigger_pulse":
                     await sim_session.trigger_pulse()
+
+                elif msg_type == "configure":
+                    await sim_session.configure(
+                        scenario_id=msg.get("scenario_id"),
+                        preset=msg.get("preset"),
+                        width=msg.get("width"),
+                        height=msg.get("height"),
+                    )
 
                 elif msg_type == "control":
                     action = msg.get("action", "")

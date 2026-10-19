@@ -208,6 +208,11 @@ class SimulationEngine:
                     badge = out.badge
                     if out.debug:
                         npc.debug_data[npc.ai_type] = out.debug
+                        if npc.ai_type == "behavior_tree":
+                            npc.debug_data["behaviorTree"] = out.debug
+                        elif npc.ai_type in ("fsm", "simple"):
+                            npc.debug_data["simple"] = out.debug
+                            npc.debug_data["fsm"] = out.debug
                 elif callable(ai_handler):
                     res = ai_handler(npc, self.player, self)
                     if isinstance(res, dict):
@@ -217,10 +222,20 @@ class SimulationEngine:
                         badge = res.get("badge", badge)
                         if "debug" in res:
                             npc.debug_data[npc.ai_type] = res["debug"]
+                            if npc.ai_type == "behavior_tree":
+                                npc.debug_data["behaviorTree"] = res["debug"]
+                            elif npc.ai_type in ("fsm", "simple"):
+                                npc.debug_data["simple"] = res["debug"]
+                                npc.debug_data["fsm"] = res["debug"]
                     elif isinstance(res, tuple):
                         desired_vel, steer_force, target_pt, badge = res[:4]
                         if len(res) > 4 and res[4]:
                             npc.debug_data[npc.ai_type] = res[4]
+                            if npc.ai_type == "behavior_tree":
+                                npc.debug_data["behaviorTree"] = res[4]
+                            elif npc.ai_type in ("fsm", "simple"):
+                                npc.debug_data["simple"] = res[4]
+                                npc.debug_data["fsm"] = res[4]
 
             # 3. Flocking Anti-Stacking Separation Forces
             # Proactively repels NPCs from each other to prevent clustering or conga lines

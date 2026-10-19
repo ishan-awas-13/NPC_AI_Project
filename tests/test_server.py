@@ -199,6 +199,40 @@ class TestServerAPI(unittest.TestCase):
             step_update = websocket.receive_json()
             self.assertEqual(step_update["type"], "state_update")
 
+    def test_simulation_configure_preset_tactical(self):
+        resp = self.client.post("/api/simulation/configure", json={"preset": "tactical"})
+        self.assertEqual(resp.status_code, 200)
+        snapshot = resp.json()["snapshot"]
+        self.assertEqual(len(snapshot["crates"]), 7)
+        self.assertEqual(len(snapshot["healStations"]), 2)
+        self.assertEqual(len(snapshot["npcs"]), 5)
+        ai_types = [n["aiType"] for n in snapshot["npcs"]]
+        self.assertIn("fuzzy", ai_types)
+        self.assertIn("behavior_tree", ai_types)
+        self.assertIn("fsm", ai_types)
+        self.assertIn("goap", ai_types)
+        self.assertIn("utility", ai_types)
+
+    def test_simulation_configure_preset_pillars(self):
+        resp = self.client.post("/api/simulation/configure", json={"preset": "pillars"})
+        self.assertEqual(resp.status_code, 200)
+        snapshot = resp.json()["snapshot"]
+        self.assertEqual(len(snapshot["crates"]), 6)
+        self.assertEqual(len(snapshot["healStations"]), 2)
+
+    def test_debug_data_aliases(self):
+        self.client.post("/api/simulation/configure", json={"preset": "tactical"})
+        resp = self.client.post("/api/simulation/control", json={"action": "step"})
+        self.assertEqual(resp.status_code, 200)
+        snapshot = resp.json()["snapshot"]
+        for npc in snapshot["npcs"]:
+            if npc["aiType"] == "behavior_tree":
+                self.assertIn("behaviorTree", npc["debugData"])
+                self.assertIn("rootSnapshot", npc["debugData"]["behaviorTree"])
+            elif npc["aiType"] in ("fsm", "simple"):
+                self.assertIn("simple", npc["debugData"])
+                self.assertIn("currentState", npc["debugData"]["simple"])
+
 
 if __name__ == "__main__":
     unittest.main()

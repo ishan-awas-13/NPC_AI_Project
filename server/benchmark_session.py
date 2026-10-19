@@ -43,6 +43,8 @@ class BenchmarkSessionManager:
                 }
 
             self.is_running = True
+            self.runner._cancel_requested = False
+            self.last_result = None
             total_ai = len(ai_types) if ai_types else 5
             self.current_progress = {
                 "completed": 0,

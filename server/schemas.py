@@ -18,7 +18,8 @@ class NPCConfig(BaseModel):
 
 
 class SimulationConfigRequest(BaseModel):
-    scenario_id: Optional[str] = "open_arena"
+    scenario_id: Optional[str] = None
+    preset: Optional[str] = None
     width: float = 1000.0
     height: float = 700.0
     npcs: Optional[List[NPCConfig]] = None
