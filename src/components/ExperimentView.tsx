@@ -124,28 +124,28 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
   const displayedRun = activeRun || viewedRun;
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row h-full w-full bg-slate-950 text-slate-100 overflow-hidden font-sans">
+    <div className="flex-1 flex flex-col lg:flex-row h-full w-full bg-slate-100 text-slate-800 overflow-hidden font-sans">
       {/* Left Column: Experiment Controls & Scenario Configuration */}
-      <div className="w-full lg:w-84 xl:w-96 shrink-0 bg-slate-900 border-r border-slate-800 flex flex-col overflow-y-auto p-4 gap-4">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+      <div className="w-full lg:w-84 xl:w-96 shrink-0 bg-white border-r border-slate-200 flex flex-col overflow-y-auto p-4 gap-4 shadow-2xs">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-200">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
+            <div className="w-8 h-8 rounded-md bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
               <FlaskConical className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="font-semibold text-sm text-white">Experiment Setup</h2>
-              <p className="text-[11px] text-slate-400">Controlled Evaluation Protocols</p>
+              <h2 className="font-bold text-sm text-slate-900">Experiment Setup</h2>
+              <p className="text-[11px] text-slate-500">Controlled Evaluation Protocols</p>
             </div>
           </div>
-          <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">
+          <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 font-semibold">
             P0 Evaluation
           </span>
         </div>
 
         {/* AI Selection */}
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
-            <Layers className="w-3.5 h-3.5 text-cyan-400" />
+          <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+            <Layers className="w-3.5 h-3.5 text-blue-600" />
             <span>AI Architecture to Evaluate</span>
           </label>
           <select
@@ -153,7 +153,7 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
             value={selectedAI}
             onChange={(e) => setSelectedAI(e.target.value as AIType | 'all')}
             disabled={isRunning}
-            className="w-full bg-slate-800/90 border border-slate-700 rounded-lg px-3 py-2 text-xs font-medium text-white focus:outline-none focus:border-cyan-500 transition-colors disabled:opacity-50"
+            className="w-full bg-white border border-slate-300 rounded-md px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500 transition-colors disabled:opacity-50 shadow-2xs cursor-pointer"
           >
             <option value="all">★ All 5 AI Architectures (Comparative Benchmark)</option>
             <option value="fuzzy">Fuzzy Logic AI (Continuous Rules)</option>
@@ -162,7 +162,7 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
             <option value="goap">Goal-Oriented Action Planner (GOAP)</option>
             <option value="utility">Utility AI (Response Curves)</option>
           </select>
-          <p className="text-[11px] text-slate-400">
+          <p className="text-[11px] text-slate-500">
             {selectedAI === 'all'
               ? 'Executes identical trials across all 5 architectures sequentially for direct comparison.'
               : `Focuses controlled benchmark trials strictly on ${experimentManager.getAILabel(selectedAI as AIType)}.`}
@@ -171,8 +171,8 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
 
         {/* Scenario Selection */}
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
-            <Zap className="w-3.5 h-3.5 text-amber-400" />
+          <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+            <Zap className="w-3.5 h-3.5 text-amber-500" />
             <span>Predetermined Scenario</span>
           </label>
           <select
@@ -180,7 +180,7 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
             value={selectedScenario}
             onChange={(e) => setSelectedScenario(e.target.value as ExperimentScenarioId)}
             disabled={isRunning}
-            className="w-full bg-slate-800/90 border border-slate-700 rounded-lg px-3 py-2 text-xs font-medium text-white focus:outline-none focus:border-cyan-500 transition-colors disabled:opacity-50"
+            className="w-full bg-white border border-slate-300 rounded-md px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500 transition-colors disabled:opacity-50 shadow-2xs cursor-pointer"
           >
             {ALL_SCENARIOS.map((scId) => {
               const sc = getExperimentScenario(scId, engine.width, engine.height);
@@ -193,17 +193,17 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
           </select>
 
           {/* Scenario Details Box */}
-          <div className="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800 text-[11px] space-y-1 text-slate-300">
-            <p className="font-semibold text-cyan-300">{currentScenarioDetails.name}</p>
-            <p className="text-slate-400 leading-relaxed">{currentScenarioDetails.description}</p>
-            <div className="pt-1 flex flex-wrap gap-2 text-[10px] text-slate-400">
-              <span className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800">
+          <div className="p-2.5 rounded-md bg-slate-50 border border-slate-200 text-[11px] space-y-1 text-slate-700 shadow-2xs">
+            <p className="font-semibold text-slate-900">{currentScenarioDetails.name}</p>
+            <p className="text-slate-500 leading-relaxed">{currentScenarioDetails.description}</p>
+            <div className="pt-1 flex flex-wrap gap-2 text-[10px] text-slate-600 font-mono">
+              <span className="px-1.5 py-0.5 rounded bg-white border border-slate-200">
                 Limit: {currentScenarioDetails.timeLimitSec}s
               </span>
-              <span className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800">
+              <span className="px-1.5 py-0.5 rounded bg-white border border-slate-200">
                 NPC HP: {currentScenarioDetails.npcInitialHealth}
               </span>
-              <span className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800">
+              <span className="px-1.5 py-0.5 rounded bg-white border border-slate-200">
                 Player HP: {currentScenarioDetails.playerInitialHealth}
               </span>
             </div>
@@ -213,11 +213,11 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
         {/* Number of Trials */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
-              <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
+            <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+              <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
               <span>Trials per AI Architecture</span>
             </label>
-            <span className="text-xs font-mono font-bold text-cyan-400">{trialCount}</span>
+            <span className="text-xs font-mono font-bold text-blue-600">{trialCount}</span>
           </div>
           <div className="grid grid-cols-5 gap-1.5">
             {[1, 5, 10, 20, 30].map((num) => (
@@ -226,19 +226,19 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                 id={`trial-count-btn-${num}`}
                 onClick={() => setTrialCount(num)}
                 disabled={isRunning}
-                className={`py-1.5 rounded text-xs font-mono font-medium transition-all ${
+                className={`py-1.5 rounded-md text-xs font-mono font-medium transition-all cursor-pointer ${
                   trialCount === num
-                    ? 'bg-cyan-600 text-white font-bold shadow-sm'
-                    : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                    ? 'bg-slate-900 text-white font-bold shadow-2xs'
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200'
                 } disabled:opacity-50`}
               >
                 {num}
               </button>
             ))}
           </div>
-          <p className="text-[11px] text-slate-400">
+          <p className="text-[11px] text-slate-500">
             Total trials to run:{' '}
-            <strong className="text-white">
+            <strong className="text-slate-900 font-mono">
               {trialCount * (selectedAI === 'all' ? 5 : 1)}
             </strong>
           </p>
@@ -246,8 +246,8 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
 
         {/* Execution Speed */}
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-purple-400" />
+          <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5 text-indigo-600" />
             <span>Execution Mode</span>
           </label>
           <div className="grid grid-cols-2 gap-2">
@@ -255,27 +255,27 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
               id="speed-fast-btn"
               onClick={() => setSpeed('fast')}
               disabled={isRunning}
-              className={`p-2 rounded-lg text-left text-xs border transition-all ${
+              className={`p-2 rounded-md text-left text-xs border transition-all cursor-pointer ${
                 speed === 'fast'
-                  ? 'bg-cyan-950/60 border-cyan-500/80 text-cyan-300'
-                  : 'bg-slate-800/60 border-slate-700/60 text-slate-400 hover:text-slate-200'
+                  ? 'bg-blue-50 border-blue-400 text-blue-900 shadow-2xs'
+                  : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
               }`}
             >
-              <div className="font-semibold text-white">⚡ Accelerated</div>
-              <div className="text-[10px] text-slate-400">~2-5 sec batch run</div>
+              <div className="font-semibold text-slate-900">⚡ Accelerated</div>
+              <div className="text-[10px] text-slate-500">~2-5 sec batch run</div>
             </button>
             <button
               id="speed-realtime-btn"
               onClick={() => setSpeed('realtime')}
               disabled={isRunning}
-              className={`p-2 rounded-lg text-left text-xs border transition-all ${
+              className={`p-2 rounded-md text-left text-xs border transition-all cursor-pointer ${
                 speed === 'realtime'
-                  ? 'bg-cyan-950/60 border-cyan-500/80 text-cyan-300'
-                  : 'bg-slate-800/60 border-slate-700/60 text-slate-400 hover:text-slate-200'
+                  ? 'bg-blue-50 border-blue-400 text-blue-900 shadow-2xs'
+                  : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
               }`}
             >
-              <div className="font-semibold text-white">👁 Visual 1x</div>
-              <div className="text-[10px] text-slate-400">Watch on arena canvas</div>
+              <div className="font-semibold text-slate-900">👁 Visual 1x</div>
+              <div className="text-[10px] text-slate-500">Watch on arena canvas</div>
             </button>
           </div>
         </div>
@@ -286,7 +286,7 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
             <button
               id="run-experiment-btn"
               onClick={handleStart}
-              className="w-full py-2.5 px-4 rounded-lg bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-700 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-lg shadow-cyan-950/50 transition-all cursor-pointer"
+              className="w-full py-2.5 px-4 rounded-md bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-2xs transition-all cursor-pointer"
             >
               <Play className="w-4 h-4 fill-white" />
               <span>Run Controlled Experiment</span>
@@ -295,7 +295,7 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
             <button
               id="cancel-experiment-btn"
               onClick={handleCancel}
-              className="w-full py-2.5 px-4 rounded-lg bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-lg shadow-rose-950/50 transition-all cursor-pointer animate-pulse"
+              className="w-full py-2.5 px-4 rounded-md bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-2xs transition-all cursor-pointer animate-pulse"
             >
               <Square className="w-4 h-4 fill-white" />
               <span>Cancel Experiment</span>
@@ -307,9 +307,9 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
             <button
               id="export-csv-btn"
               onClick={() => experimentManager.exportActiveRunCSV()}
-              className="w-full py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 active:bg-slate-850 text-slate-200 font-medium text-xs flex items-center justify-center gap-2 border border-slate-700 transition-all cursor-pointer"
+              className="w-full py-2 px-3 rounded-md bg-white hover:bg-slate-50 text-slate-800 font-medium text-xs flex items-center justify-center gap-2 border border-slate-300 shadow-2xs transition-all cursor-pointer"
             >
-              <Download className="w-3.5 h-3.5 text-emerald-400" />
+              <Download className="w-3.5 h-3.5 text-emerald-600" />
               <span>Export Raw Trial Data (CSV)</span>
             </button>
           )}
@@ -317,39 +317,39 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
 
         {/* Live Progress Card */}
         {isRunning && progressInfo && (
-          <div className="p-3 rounded-lg bg-cyan-950/40 border border-cyan-500/40 text-xs space-y-2">
-            <div className="flex items-center justify-between font-medium text-cyan-300">
+          <div className="p-3 rounded-md bg-blue-50 border border-blue-200 text-xs space-y-2 shadow-2xs">
+            <div className="flex items-center justify-between font-semibold text-blue-900">
               <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                <span className="w-2 h-2 rounded-full bg-blue-600 animate-ping" />
                 Executing Trial...
               </span>
               <span className="font-mono">
                 {progressInfo.completed} / {progressInfo.total}
               </span>
             </div>
-            <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+            <div className="w-full h-1.5 rounded-full bg-slate-200 overflow-hidden">
               <div
-                className="h-full bg-cyan-500 transition-all duration-150"
+                className="h-full bg-blue-600 transition-all duration-150"
                 style={{
                   width: `${(progressInfo.completed / Math.max(1, progressInfo.total)) * 100}%`,
                 }}
               />
             </div>
-            <p className="text-[11px] text-slate-400 font-mono truncate">{progressInfo.currentAI}</p>
+            <p className="text-[11px] text-slate-600 font-mono truncate">{progressInfo.currentAI}</p>
           </div>
         )}
 
         {/* Research Framing Context Banner */}
-        <div className="mt-auto p-3 rounded-lg bg-slate-950/80 border border-slate-800 text-[11px] text-slate-400 space-y-1">
-          <div className="flex items-center gap-1.5 text-slate-300 font-semibold">
-            <Info className="w-3.5 h-3.5 text-cyan-400" />
+        <div className="mt-auto p-3 rounded-md bg-slate-50 border border-slate-200 text-[11px] text-slate-600 space-y-1 shadow-2xs">
+          <div className="flex items-center gap-1.5 text-slate-800 font-semibold">
+            <Info className="w-3.5 h-3.5 text-blue-600" />
             <span>Academic Research Framing</span>
           </div>
-          <p className="italic text-slate-400">
+          <p className="italic text-slate-500">
             &ldquo;How does fuzzy-logic decision making affect NPC behavior compared with alternative AI
             decision architectures?&rdquo;
           </p>
-          <p className="text-[10px] text-slate-500 pt-1">
+          <p className="text-[10px] text-slate-400 pt-1">
             Fair evaluation: zero randomness in initial conditions. All entities share exact starting health,
             spatial obstacles, and deterministic benchmark opponent interactions.
           </p>
@@ -357,62 +357,62 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
       </div>
 
       {/* Right Column: Comparative Results Dashboard */}
-      <div className="flex-1 flex flex-col overflow-hidden bg-slate-950">
+      <div className="flex-1 flex flex-col overflow-hidden bg-slate-100">
         {/* Sub-Header Tabs */}
-        <div className="h-11 shrink-0 bg-slate-900 border-b border-slate-800 px-4 flex items-center justify-between">
+        <div className="h-11 shrink-0 bg-white border-b border-slate-200 px-4 flex items-center justify-between shadow-2xs">
           <div className="flex items-center gap-2">
             {(isRunning && speed === 'realtime') || historyTab === 'visual' ? (
               <button
                 id="tab-visual-arena-btn"
                 onClick={() => setHistoryTab('visual')}
-                className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                className={`px-3 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                   historyTab === 'visual'
-                    ? 'bg-purple-600 text-white shadow-sm'
-                    : 'text-purple-300 hover:text-purple-100 hover:bg-slate-800'
+                    ? 'bg-slate-900 text-white shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                 }`}
               >
-                <MonitorPlay className="w-3.5 h-3.5 text-purple-200" />
+                <MonitorPlay className="w-3.5 h-3.5 text-indigo-500" />
                 <span>Live Arena View</span>
                 {isRunning && speed === 'realtime' && (
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse ml-0.5" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse ml-0.5" />
                 )}
               </button>
             ) : null}
             <button
               id="tab-matrix-btn"
               onClick={() => setHistoryTab('matrix')}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all ${
+              className={`px-3 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                 historyTab === 'matrix'
-                  ? 'bg-cyan-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                  ? 'bg-slate-900 text-white shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
-              <FileSpreadsheet className="w-3.5 h-3.5" />
+              <FileSpreadsheet className="w-3.5 h-3.5 text-slate-500" />
               <span>Comparative Metrics Matrix</span>
             </button>
             <button
               id="tab-history-btn"
               onClick={() => setHistoryTab('history')}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all ${
+              className={`px-3 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                 historyTab === 'history'
-                  ? 'bg-cyan-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                  ? 'bg-slate-900 text-white shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
-              <History className="w-3.5 h-3.5" />
+              <History className="w-3.5 h-3.5 text-slate-500" />
               <span>Experiment History ({experimentManager.history.length})</span>
             </button>
           </div>
 
           {displayedRun && (
             <div className="flex items-center gap-3 text-xs">
-              <span className="text-slate-400 text-[11px] hidden sm:inline font-mono">
+              <span className="text-slate-500 text-[11px] hidden sm:inline font-mono">
                 {displayedRun.scenarioName} &bull; {displayedRun.completedTrials} trials recorded
               </span>
               <button
                 id="toggle-raw-trials-btn"
                 onClick={() => setShowRawTrials(!showRawTrials)}
-                className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-medium border border-slate-700 flex items-center gap-1"
+                className="px-2.5 py-1 rounded-md bg-white hover:bg-slate-50 text-slate-700 text-[11px] font-medium border border-slate-300 flex items-center gap-1 shadow-2xs cursor-pointer"
               >
                 {showRawTrials ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                 <span>{showRawTrials ? 'Hide Raw Trials' : 'Show Raw Trials'}</span>
@@ -601,17 +601,17 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
               ) : (
                 <>
                   {/* Results Overview Header Banner */}
-                  <div className="p-4 rounded-xl bg-gradient-to-r from-slate-900 to-slate-900/60 border border-slate-800 flex flex-wrap items-center justify-between gap-3">
+                  <div className="p-4 rounded-xl bg-white border border-slate-200 flex flex-wrap items-center justify-between gap-3 shadow-2xs">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="px-2.5 py-0.5 rounded-full bg-cyan-950 border border-cyan-500/50 text-cyan-300 text-xs font-semibold">
+                        <span className="px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-300 text-slate-700 text-xs font-semibold">
                           {displayedRun.scenarioName}
                         </span>
-                        <span className="text-xs text-slate-400">
+                        <span className="text-xs text-slate-500 font-mono">
                           {displayedRun.completedTrials} trials recorded
                         </span>
                       </div>
-                      <h2 className="text-base font-bold text-white mt-1">
+                      <h2 className="text-base font-bold text-slate-900 mt-1">
                         Quantitative Evaluation Matrix
                       </h2>
                     </div>
@@ -620,7 +620,7 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                       <button
                         id="matrix-export-csv-btn"
                         onClick={() => experimentManager.exportActiveRunCSV()}
-                        className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+                        className="px-3 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
                       >
                         <Download className="w-3.5 h-3.5" />
                         <span>Export CSV for Python / Pandas</span>
@@ -629,52 +629,54 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                   </div>
 
                   {/* Comparative Architecture Table */}
-                  <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/90 shadow-xl">
+                  <div className="overflow-x-auto rounded-xl border border-slate-300 bg-white shadow-sm">
                     <table className="w-full text-left text-xs border-collapse">
                       <thead>
-                        <tr className="border-b border-slate-800 bg-slate-950/60 text-slate-400 font-semibold">
-                          <th className="py-3 px-4 min-w-[170px]">Metric / Parameter</th>
-                          <th className="py-3 px-4 min-w-[130px] text-amber-300">
+                        <tr className="border-b-2 border-slate-300 bg-slate-200/90 text-slate-800 font-bold">
+                          <th className="py-3.5 px-4 min-w-[180px] bg-slate-200 text-slate-900 uppercase tracking-wider text-[11px] font-bold border-r border-slate-300 shadow-2xs">
+                            Metric / Parameter
+                          </th>
+                          <th className="py-3.5 px-4 min-w-[130px] bg-amber-100/70 text-amber-950 border-t-3 border-t-amber-500 font-bold border-r border-slate-200">
                             <div className="flex items-center gap-1.5">
-                              <span className="w-2 h-2 rounded-full bg-amber-400" />
+                              <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-2xs" />
                               <span>FSM (Simple)</span>
                             </div>
                           </th>
-                          <th className="py-3 px-4 min-w-[130px] text-purple-300">
+                          <th className="py-3.5 px-4 min-w-[130px] bg-indigo-100/70 text-indigo-950 border-t-3 border-t-indigo-500 font-bold border-r border-slate-200">
                             <div className="flex items-center gap-1.5">
-                              <span className="w-2 h-2 rounded-full bg-purple-400" />
+                              <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 shadow-2xs" />
                               <span>Behavior Tree</span>
                             </div>
                           </th>
-                          <th className="py-3 px-4 min-w-[140px] text-cyan-300 bg-cyan-950/30 border-x border-cyan-500/20">
+                          <th className="py-3.5 px-4 min-w-[140px] bg-sky-200/80 text-sky-950 border-t-3 border-t-sky-600 font-extrabold border-x-2 border-sky-400 ring-1 ring-sky-300/60 shadow-2xs">
                             <div className="flex items-center gap-1.5">
-                              <span className="w-2 h-2 rounded-full bg-cyan-400" />
-                              <span className="font-bold">Fuzzy Logic ★</span>
+                              <span className="w-2.5 h-2.5 rounded-full bg-sky-600 shadow-2xs" />
+                              <span>Fuzzy Logic ★</span>
                             </div>
                           </th>
-                          <th className="py-3 px-4 min-w-[130px] text-blue-300">
+                          <th className="py-3.5 px-4 min-w-[130px] bg-blue-100/70 text-blue-950 border-t-3 border-t-blue-500 font-bold border-r border-slate-200">
                             <div className="flex items-center gap-1.5">
-                              <span className="w-2 h-2 rounded-full bg-blue-400" />
+                              <span className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-2xs" />
                               <span>GOAP Planner</span>
                             </div>
                           </th>
-                          <th className="py-3 px-4 min-w-[130px] text-rose-300">
+                          <th className="py-3.5 px-4 min-w-[130px] bg-rose-100/70 text-rose-950 border-t-3 border-t-rose-500 font-bold">
                             <div className="flex items-center gap-1.5">
-                              <span className="w-2 h-2 rounded-full bg-rose-400" />
+                              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-2xs" />
                               <span>Utility AI</span>
                             </div>
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-800/70 text-slate-200">
+                      <tbody className="divide-y divide-slate-200 text-slate-800">
                         {/* Trials Recorded */}
-                        <tr className="hover:bg-slate-800/30 font-mono">
-                          <td className="py-2.5 px-4 font-sans font-medium text-slate-400">
+                        <tr className="hover:bg-slate-50 font-mono">
+                          <td className="py-2.5 px-4 font-sans font-semibold text-slate-800 bg-slate-50/90 border-r border-slate-200">
                             Completed Trials
                           </td>
                           <td className="py-2.5 px-4">{displayedRun.aggregates.simple?.trialCount || '—'}</td>
                           <td className="py-2.5 px-4">{displayedRun.aggregates.behavior_tree?.trialCount || '—'}</td>
-                          <td className="py-2.5 px-4 font-bold text-cyan-300 bg-cyan-950/20 border-x border-cyan-500/20">
+                          <td className="py-2.5 px-4 font-bold text-sky-950 bg-sky-50/50 border-x border-sky-200">
                             {displayedRun.aggregates.fuzzy?.trialCount || '—'}
                           </td>
                           <td className="py-2.5 px-4">{displayedRun.aggregates.goap?.trialCount || '—'}</td>
@@ -682,9 +684,9 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                         </tr>
 
                         {/* Survival Time */}
-                        <tr className="hover:bg-slate-800/30 font-mono">
-                          <td className="py-2.5 px-4 font-sans font-medium text-slate-300 flex items-center gap-1.5">
-                            <Clock className="w-3.5 h-3.5 text-purple-400" />
+                        <tr className="hover:bg-slate-50 font-mono bg-white">
+                          <td className="py-2.5 px-4 font-sans font-semibold text-slate-800 bg-slate-50/90 border-r border-slate-200 flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5 text-indigo-600" />
                             <span>Survival Time (s)</span>
                           </td>
                           <td className="py-2.5 px-4">
@@ -693,7 +695,7 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                           <td className="py-2.5 px-4">
                             {formatMetric(displayedRun.aggregates.behavior_tree?.meanSurvivalTime, displayedRun.aggregates.behavior_tree?.stdSurvivalTime)}
                           </td>
-                          <td className="py-2.5 px-4 font-bold text-cyan-300 bg-cyan-950/20 border-x border-cyan-500/20">
+                          <td className="py-2.5 px-4 font-bold text-sky-950 bg-sky-50/50 border-x border-sky-200">
                             {formatMetric(displayedRun.aggregates.fuzzy?.meanSurvivalTime, displayedRun.aggregates.fuzzy?.stdSurvivalTime)}
                           </td>
                           <td className="py-2.5 px-4">
@@ -705,9 +707,9 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                         </tr>
 
                         {/* Damage Dealt */}
-                        <tr className="hover:bg-slate-800/30 font-mono">
-                          <td className="py-2.5 px-4 font-sans font-medium text-slate-300 flex items-center gap-1.5">
-                            <Swords className="w-3.5 h-3.5 text-emerald-400" />
+                        <tr className="hover:bg-slate-50 font-mono bg-slate-50/30">
+                          <td className="py-2.5 px-4 font-sans font-semibold text-slate-800 bg-slate-50/90 border-r border-slate-200 flex items-center gap-1.5">
+                            <Swords className="w-3.5 h-3.5 text-emerald-600" />
                             <span>Damage Dealt</span>
                           </td>
                           <td className="py-2.5 px-4">
@@ -716,7 +718,7 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                           <td className="py-2.5 px-4">
                             {formatMetric(displayedRun.aggregates.behavior_tree?.meanDamageDealt, displayedRun.aggregates.behavior_tree?.stdDamageDealt)}
                           </td>
-                          <td className="py-2.5 px-4 font-bold text-cyan-300 bg-cyan-950/20 border-x border-cyan-500/20">
+                          <td className="py-2.5 px-4 font-bold text-sky-950 bg-sky-50/50 border-x border-sky-200">
                             {formatMetric(displayedRun.aggregates.fuzzy?.meanDamageDealt, displayedRun.aggregates.fuzzy?.stdDamageDealt)}
                           </td>
                           <td className="py-2.5 px-4">
@@ -728,9 +730,9 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                         </tr>
 
                         {/* Damage Received */}
-                        <tr className="hover:bg-slate-800/30 font-mono">
-                          <td className="py-2.5 px-4 font-sans font-medium text-slate-300 flex items-center gap-1.5">
-                            <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />
+                        <tr className="hover:bg-slate-50 font-mono bg-white">
+                          <td className="py-2.5 px-4 font-sans font-semibold text-slate-800 bg-slate-50/90 border-r border-slate-200 flex items-center gap-1.5">
+                            <ShieldAlert className="w-3.5 h-3.5 text-rose-500" />
                             <span>Damage Received</span>
                           </td>
                           <td className="py-2.5 px-4">
@@ -739,7 +741,7 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                           <td className="py-2.5 px-4">
                             {formatMetric(displayedRun.aggregates.behavior_tree?.meanDamageReceived, displayedRun.aggregates.behavior_tree?.stdDamageReceived)}
                           </td>
-                          <td className="py-2.5 px-4 font-bold text-cyan-300 bg-cyan-950/20 border-x border-cyan-500/20">
+                          <td className="py-2.5 px-4 font-bold text-sky-950 bg-sky-50/50 border-x border-sky-200">
                             {formatMetric(displayedRun.aggregates.fuzzy?.meanDamageReceived, displayedRun.aggregates.fuzzy?.stdDamageReceived)}
                           </td>
                           <td className="py-2.5 px-4">
@@ -751,8 +753,8 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                         </tr>
 
                         {/* Attacks */}
-                        <tr className="hover:bg-slate-800/30 font-mono">
-                          <td className="py-2.5 px-4 font-sans font-medium text-slate-300">
+                        <tr className="hover:bg-slate-50 font-mono bg-slate-50/30">
+                          <td className="py-2.5 px-4 font-sans font-semibold text-slate-800 bg-slate-50/90 border-r border-slate-200">
                             Attack Contacts
                           </td>
                           <td className="py-2.5 px-4">
@@ -761,7 +763,7 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                           <td className="py-2.5 px-4">
                             {formatMetric(displayedRun.aggregates.behavior_tree?.meanAttacks, displayedRun.aggregates.behavior_tree?.stdAttacks)}
                           </td>
-                          <td className="py-2.5 px-4 font-bold text-cyan-300 bg-cyan-950/20 border-x border-cyan-500/20">
+                          <td className="py-2.5 px-4 font-bold text-sky-950 bg-sky-50/50 border-x border-sky-200">
                             {formatMetric(displayedRun.aggregates.fuzzy?.meanAttacks, displayedRun.aggregates.fuzzy?.stdAttacks)}
                           </td>
                           <td className="py-2.5 px-4">
@@ -773,8 +775,8 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                         </tr>
 
                         {/* Retreats */}
-                        <tr className="hover:bg-slate-800/30 font-mono">
-                          <td className="py-2.5 px-4 font-sans font-medium text-slate-300">
+                        <tr className="hover:bg-slate-50 font-mono bg-white">
+                          <td className="py-2.5 px-4 font-sans font-semibold text-slate-800 bg-slate-50/90 border-r border-slate-200">
                             Retreat Decisions
                           </td>
                           <td className="py-2.5 px-4">
@@ -783,7 +785,7 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                           <td className="py-2.5 px-4">
                             {formatMetric(displayedRun.aggregates.behavior_tree?.meanRetreats, displayedRun.aggregates.behavior_tree?.stdRetreats)}
                           </td>
-                          <td className="py-2.5 px-4 font-bold text-cyan-300 bg-cyan-950/20 border-x border-cyan-500/20">
+                          <td className="py-2.5 px-4 font-bold text-sky-950 bg-sky-50/50 border-x border-sky-200">
                             {formatMetric(displayedRun.aggregates.fuzzy?.meanRetreats, displayedRun.aggregates.fuzzy?.stdRetreats)}
                           </td>
                           <td className="py-2.5 px-4">
@@ -795,9 +797,9 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                         </tr>
 
                         {/* Distance Travelled */}
-                        <tr className="hover:bg-slate-800/30 font-mono">
-                          <td className="py-2.5 px-4 font-sans font-medium text-slate-300 flex items-center gap-1.5">
-                            <Footprints className="w-3.5 h-3.5 text-amber-400" />
+                        <tr className="hover:bg-slate-50 font-mono bg-slate-50/30">
+                          <td className="py-2.5 px-4 font-sans font-semibold text-slate-800 bg-slate-50/90 border-r border-slate-200 flex items-center gap-1.5">
+                            <Footprints className="w-3.5 h-3.5 text-amber-500" />
                             <span>Distance Travelled</span>
                           </td>
                           <td className="py-2.5 px-4">
@@ -806,7 +808,7 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                           <td className="py-2.5 px-4">
                             {formatMetric(displayedRun.aggregates.behavior_tree?.meanDistanceTravelled, displayedRun.aggregates.behavior_tree?.stdDistanceTravelled)}
                           </td>
-                          <td className="py-2.5 px-4 font-bold text-cyan-300 bg-cyan-950/20 border-x border-cyan-500/20">
+                          <td className="py-2.5 px-4 font-bold text-sky-950 bg-sky-50/50 border-x border-sky-200">
                             {formatMetric(displayedRun.aggregates.fuzzy?.meanDistanceTravelled, displayedRun.aggregates.fuzzy?.stdDistanceTravelled)}
                           </td>
                           <td className="py-2.5 px-4">
@@ -818,33 +820,35 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                         </tr>
 
                         {/* NPC Win Rate */}
-                        <tr className="hover:bg-slate-800/30 font-mono bg-slate-950/40">
-                          <td className="py-2.5 px-4 font-sans font-bold text-white">
+                        <tr className="hover:bg-slate-100 font-mono bg-slate-100/90 border-t-2 border-slate-300">
+                          <td className="py-3 px-4 font-sans font-bold text-slate-900 bg-slate-200/90 border-r border-slate-300">
                             NPC Win Rate (%)
                           </td>
-                          <td className="py-2.5 px-4 font-bold text-amber-300">
+                          <td className="py-3 px-4 font-bold text-amber-900">
                             {displayedRun.aggregates.simple ? `${displayedRun.aggregates.simple.npcWinRate}%` : '—'}
                           </td>
-                          <td className="py-2.5 px-4 font-bold text-purple-300">
+                          <td className="py-3 px-4 font-bold text-indigo-900">
                             {displayedRun.aggregates.behavior_tree ? `${displayedRun.aggregates.behavior_tree.npcWinRate}%` : '—'}
                           </td>
-                          <td className="py-2.5 px-4 font-extrabold text-cyan-300 bg-cyan-950/30 border-x border-cyan-500/20">
+                          <td className="py-3 px-4 font-extrabold text-sky-950 bg-sky-100/70 border-x border-sky-300">
                             {displayedRun.aggregates.fuzzy ? `${displayedRun.aggregates.fuzzy.npcWinRate}%` : '—'}
                           </td>
-                          <td className="py-2.5 px-4 font-bold text-blue-300">
+                          <td className="py-3 px-4 font-bold text-blue-900">
                             {displayedRun.aggregates.goap ? `${displayedRun.aggregates.goap.npcWinRate}%` : '—'}
                           </td>
-                          <td className="py-2.5 px-4 font-bold text-rose-300">
+                          <td className="py-3 px-4 font-bold text-rose-900">
                             {displayedRun.aggregates.utility ? `${displayedRun.aggregates.utility.npcWinRate}%` : '—'}
                           </td>
                         </tr>
 
                         {/* Player Win Rate */}
-                        <tr className="hover:bg-slate-800/30 font-mono text-slate-400">
-                          <td className="py-2.5 px-4 font-sans">Player Win Rate (%)</td>
+                        <tr className="hover:bg-slate-50 font-mono text-slate-500 bg-white">
+                          <td className="py-2.5 px-4 font-sans font-semibold text-slate-700 bg-slate-50/90 border-r border-slate-200">
+                            Player Win Rate (%)
+                          </td>
                           <td className="py-2.5 px-4">{displayedRun.aggregates.simple ? `${displayedRun.aggregates.simple.playerWinRate}%` : '—'}</td>
                           <td className="py-2.5 px-4">{displayedRun.aggregates.behavior_tree ? `${displayedRun.aggregates.behavior_tree.playerWinRate}%` : '—'}</td>
-                          <td className="py-2.5 px-4 font-medium text-cyan-300 bg-cyan-950/20 border-x border-cyan-500/20">
+                          <td className="py-2.5 px-4 font-medium text-sky-950 bg-sky-50/50 border-x border-sky-200">
                             {displayedRun.aggregates.fuzzy ? `${displayedRun.aggregates.fuzzy.playerWinRate}%` : '—'}
                           </td>
                           <td className="py-2.5 px-4">{displayedRun.aggregates.goap ? `${displayedRun.aggregates.goap.playerWinRate}%` : '—'}</td>
@@ -858,18 +862,18 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                   {showRawTrials && (
                     <div className="space-y-2 pt-2">
                       <div className="flex items-center justify-between">
-                        <h4 className="text-xs font-semibold text-white flex items-center gap-1.5">
-                          <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
+                        <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                          <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
                           <span>Raw Trial Records ({displayedRun.results.length} trials)</span>
                         </h4>
-                        <span className="text-[11px] text-slate-400 font-mono">
+                        <span className="text-[11px] text-slate-500 font-mono">
                           Ready for Python / Pandas / Matplotlib
                         </span>
                       </div>
 
-                      <div className="max-h-72 overflow-y-auto rounded-lg border border-slate-800 bg-slate-900/60 font-mono text-[11px]">
+                      <div className="max-h-72 overflow-y-auto rounded-xl border border-slate-300 bg-white font-mono text-[11px] shadow-sm">
                         <table className="w-full text-left border-collapse">
-                          <thead className="bg-slate-950 sticky top-0 border-b border-slate-800 text-slate-400">
+                          <thead className="bg-slate-200 sticky top-0 border-b-2 border-slate-300 text-slate-800 font-bold text-xs shadow-2xs">
                             <tr>
                               <th className="py-2 px-3">#</th>
                               <th className="py-2 px-3">AI Architecture</th>
@@ -882,25 +886,25 @@ export const ExperimentView: React.FC<ExperimentViewProps> = ({
                               <th className="py-2 px-3">Outcome</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-slate-800 text-slate-300">
+                          <tbody className="divide-y divide-slate-200 text-slate-700">
                             {displayedRun.results.map((trial) => (
-                              <tr key={`${trial.aiType}_${trial.trialNumber}`} className="hover:bg-slate-800/40">
-                                <td className="py-1.5 px-3 text-slate-400">{trial.trialNumber}</td>
-                                <td className="py-1.5 px-3 font-semibold text-white">{trial.aiLabel}</td>
-                                <td className="py-1.5 px-3 text-slate-400">{trial.seed}</td>
-                                <td className="py-1.5 px-3">{trial.survivalTime.toFixed(1)}</td>
-                                <td className="py-1.5 px-3 text-emerald-400">{trial.damageDealt.toFixed(0)}</td>
-                                <td className="py-1.5 px-3 text-rose-400">{trial.damageReceived.toFixed(0)}</td>
+                              <tr key={`${trial.aiType}_${trial.trialNumber}`} className="hover:bg-slate-50">
+                                <td className="py-1.5 px-3 text-slate-500">{trial.trialNumber}</td>
+                                <td className="py-1.5 px-3 font-semibold text-slate-900">{trial.aiLabel}</td>
+                                <td className="py-1.5 px-3 text-slate-500">{trial.seed}</td>
+                                <td className="py-1.5 px-3 font-medium">{trial.survivalTime.toFixed(1)}</td>
+                                <td className="py-1.5 px-3 text-emerald-700 font-medium">{trial.damageDealt.toFixed(0)}</td>
+                                <td className="py-1.5 px-3 text-rose-700 font-medium">{trial.damageReceived.toFixed(0)}</td>
                                 <td className="py-1.5 px-3">{trial.attacks}</td>
                                 <td className="py-1.5 px-3">{trial.retreats}</td>
                                 <td className="py-1.5 px-3">
                                   <span
                                     className={`px-1.5 py-0.5 rounded text-[10px] font-semibold ${
                                       trial.npcWon
-                                        ? 'bg-emerald-950 text-emerald-300 border border-emerald-800/60'
+                                        ? 'bg-emerald-50 text-emerald-800 border border-emerald-300'
                                         : trial.playerWon
-                                        ? 'bg-rose-950 text-rose-300 border border-rose-800/60'
-                                        : 'bg-slate-800 text-slate-300'
+                                        ? 'bg-rose-50 text-rose-800 border border-rose-300'
+                                        : 'bg-slate-100 text-slate-700 border border-slate-200'
                                     }`}
                                   >
                                     {trial.outcome}

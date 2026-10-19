@@ -133,11 +133,11 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({ engine, onCl
           e.stopPropagation();
           setIsExpanded(true);
         }}
-        className="pointer-events-auto absolute bottom-3 right-3 z-30 bg-slate-950/90 hover:bg-slate-900 border border-slate-700/80 hover:border-cyan-500/50 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-2xl text-xs flex items-center gap-2.5 cursor-pointer transition-all duration-150 select-none group"
+        className="pointer-events-auto absolute bottom-3 right-3 z-30 bg-slate-900/90 hover:bg-slate-850 border border-slate-700/80 hover:border-slate-500 backdrop-blur-md px-3 py-1.5 rounded-lg shadow-xl text-xs flex items-center gap-2.5 cursor-pointer transition-all duration-150 select-none group"
         title="Click to expand real-time frame time and AI computational cost profiler graph"
       >
-        <div className="flex items-center gap-1.5 text-cyan-400">
-          <Activity className="w-4 h-4 group-hover:scale-110 transition-transform" />
+        <div className="flex items-center gap-1.5 text-slate-300">
+          <Activity className="w-3.5 h-3.5 text-sky-400 group-hover:scale-105 transition-transform" />
           <span className="font-mono font-bold text-white">{fps} FPS</span>
         </div>
         <span className="text-slate-600">•</span>
@@ -152,11 +152,11 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({ engine, onCl
           </span>
         </div>
         <span className="text-slate-600">•</span>
-        <div className="flex items-center gap-1 text-purple-300 font-mono">
+        <div className="flex items-center gap-1 text-slate-300 font-mono">
           <span className="text-slate-400">AI Load:</span>
-          <span className="font-semibold text-purple-400">{totalAIUs}μs</span>
+          <span className="font-semibold text-sky-300">{totalAIUs}μs</span>
         </div>
-        <div className="ml-1 pl-1.5 border-l border-slate-700 text-slate-400 hover:text-cyan-300 flex items-center gap-0.5 text-[11px]">
+        <div className="ml-1 pl-1.5 border-l border-slate-700 text-slate-400 hover:text-slate-200 flex items-center gap-0.5 text-[11px]">
           <span>Expand</span>
           <Maximize2 className="w-3 h-3" />
         </div>
@@ -169,13 +169,13 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({ engine, onCl
     <div
       id="performance-telemetry-widget"
       onClick={(e) => e.stopPropagation()}
-      className="pointer-events-auto absolute bottom-3 right-3 z-30 w-[350px] max-w-[calc(100vw-24px)] bg-slate-950/95 border border-slate-800 backdrop-blur-xl rounded-xl shadow-2xl overflow-hidden select-none text-xs font-sans animate-in fade-in zoom-in-95 duration-150 flex flex-col"
+      className="pointer-events-auto absolute bottom-3 right-3 z-30 w-[350px] max-w-[calc(100vw-24px)] bg-slate-900/95 border border-slate-700 backdrop-blur-xl rounded-xl shadow-2xl overflow-hidden select-none text-xs font-sans animate-in fade-in zoom-in-95 duration-150 flex flex-col"
     >
       {/* Top Header & Telemetry Badges */}
-      <div className="px-3 py-2 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between">
+      <div className="px-3 py-2 bg-slate-850/90 border-b border-slate-750 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
-            <Activity className="w-3.5 h-3.5" />
+          <div className="w-5 h-5 rounded bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300">
+            <Activity className="w-3.5 h-3.5 text-sky-400" />
           </div>
           <div>
             <h3 className="font-bold text-[11px] text-white tracking-wide uppercase flex items-center gap-1.5">
@@ -189,10 +189,10 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({ engine, onCl
           <button
             onClick={() => handleRunBenchmark()}
             disabled={isBenchmarking}
-            className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[10px] text-cyan-300 font-medium border border-slate-700 hover:border-cyan-500/40 transition-colors flex items-center gap-1"
+            className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-750 text-[10px] text-slate-200 font-medium border border-slate-700 hover:border-slate-600 transition-colors flex items-center gap-1"
             title="Execute 300-cycle high-precision stress test across all 5 AI algorithms"
           >
-            <Sparkles className="w-3 h-3 text-cyan-400" />
+            <Sparkles className="w-3 h-3 text-sky-400" />
             <span>{isBenchmarking ? 'Testing...' : 'Benchmark'}</span>
           </button>
 
@@ -235,14 +235,14 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({ engine, onCl
 
         <div className="flex flex-col">
           <span className="text-[10px] text-slate-400">AI TICK LOAD</span>
-          <span className="font-bold text-purple-400">
+          <span className="font-bold text-sky-300">
             {totalAIUs} μs <span className="text-[10px] text-slate-400">({totalAIMs}ms)</span>
           </span>
         </div>
 
         <div className="flex flex-col text-right">
           <span className="text-[10px] text-slate-400">BUDGET (16.6ms)</span>
-          <span className="font-bold text-cyan-300">{frameBudgetPct}%</span>
+          <span className="font-bold text-slate-200">{frameBudgetPct}%</span>
         </div>
       </div>
 
@@ -254,7 +254,7 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({ engine, onCl
             onClick={() => setViewMode('combined')}
             className={`px-2 py-0.5 rounded transition-all font-medium ${
               viewMode === 'combined'
-                ? 'bg-cyan-600 text-white shadow-sm'
+                ? 'bg-slate-750 text-white shadow-xs font-semibold'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
@@ -264,7 +264,7 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({ engine, onCl
             onClick={() => setViewMode('multi_ai')}
             className={`px-2 py-0.5 rounded transition-all font-medium ${
               viewMode === 'multi_ai'
-                ? 'bg-cyan-600 text-white shadow-sm'
+                ? 'bg-slate-750 text-white shadow-xs font-semibold'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
@@ -278,7 +278,7 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({ engine, onCl
           <select
             value={scaleMode}
             onChange={(e) => setScaleMode(e.target.value as ScaleMode)}
-            className="bg-slate-900 border border-slate-700 text-slate-300 rounded px-1.5 py-0.5 text-[10px] focus:outline-none focus:border-cyan-500"
+            className="bg-slate-900 border border-slate-700 text-slate-300 rounded px-1.5 py-0.5 text-[10px] focus:outline-none focus:border-slate-500"
           >
             <option value="target_60">16.6ms (60 FPS)</option>
             <option value="target_30">33.3ms (30 FPS)</option>
@@ -381,10 +381,10 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({ engine, onCl
 
       {/* Benchmark Results Modal / Overlay */}
       {showBenchmarkModal && benchmarkData && (
-        <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-md p-3 z-40 flex flex-col justify-between animate-in fade-in duration-150">
+        <div className="absolute inset-0 bg-slate-900/95 backdrop-blur-md p-3 z-40 flex flex-col justify-between animate-in fade-in duration-150 border border-slate-700 rounded-xl">
           <div>
-            <div className="flex items-center justify-between pb-1.5 border-b border-slate-800">
-              <div className="flex items-center gap-1.5 text-cyan-400 font-bold text-xs">
+            <div className="flex items-center justify-between pb-1.5 border-b border-slate-750">
+              <div className="flex items-center gap-1.5 text-slate-200 font-bold text-xs">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                 <span>AI Micro-Benchmark (300 Iterations)</span>
               </div>
@@ -404,14 +404,14 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({ engine, onCl
               {benchmarkData.map((b) => (
                 <div
                   key={b.aiType}
-                  className="bg-slate-900/80 border border-slate-800 rounded p-1.5 text-[11px]"
+                  className="bg-slate-800/80 border border-slate-700 rounded p-1.5 text-[11px]"
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-white flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full" style={{ backgroundColor: b.color }} />
                       {b.name}
                     </span>
-                    <span className="font-mono text-cyan-300 font-bold">
+                    <span className="font-mono text-slate-200 font-bold">
                       {b.meanUs} μs <span className="text-[10px] text-slate-400">(±{b.stdUs}μs)</span>
                     </span>
                   </div>
@@ -426,7 +426,7 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({ engine, onCl
 
           <button
             onClick={() => setShowBenchmarkModal(false)}
-            className="w-full mt-2 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-medium text-xs shadow"
+            className="w-full mt-2 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded font-medium text-xs border border-slate-700 shadow-sm transition-colors"
           >
             Close Benchmark
           </button>

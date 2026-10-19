@@ -64,7 +64,7 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
   return (
     <div
       id="controls-toolbar"
-      className="bg-slate-900 border-b border-slate-800 px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-slate-300 text-xs select-none"
+      className="bg-slate-50 border-b border-slate-200 px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-slate-700 text-xs select-none shadow-2xs"
     >
       {/* 1. Simulation Playback Controls */}
       <div className="flex items-center gap-2">
@@ -73,10 +73,10 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
           onClick={() => {
             engine.isPaused = !engine.isPaused;
           }}
-          className={`px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition-all ${
+          className={`px-3 py-1.5 rounded-md font-semibold flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer ${
             engine.isPaused
               ? 'bg-emerald-600 hover:bg-emerald-500 text-white'
-              : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
+              : 'bg-white hover:bg-slate-100 text-slate-800 border border-slate-300'
           }`}
         >
           {engine.isPaused ? (
@@ -91,7 +91,7 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
         </button>
 
         {/* Speed Selector */}
-        <div className="flex bg-slate-800 rounded-lg p-0.5 border border-slate-700">
+        <div className="flex bg-slate-200/80 rounded-md p-0.5 border border-slate-300/80">
           {[0.5, 1.0, 2.0].map((s) => (
             <button
               key={s}
@@ -99,10 +99,10 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
               onClick={() => {
                 engine.timeScale = s;
               }}
-              className={`px-2 py-1 rounded text-[11px] font-mono font-medium transition-all ${
+              className={`px-2 py-1 rounded text-[11px] font-mono font-medium transition-all cursor-pointer ${
                 engine.timeScale === s
-                  ? 'bg-cyan-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               {s}x
@@ -113,7 +113,7 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
         <button
           id="reset-game-btn"
           onClick={onReset}
-          className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white transition-all"
+          className="p-1.5 rounded-md bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 hover:text-slate-900 transition-all shadow-2xs cursor-pointer"
           title="Reset Simulation"
         >
           <RotateCcw className="w-4 h-4" />
@@ -121,13 +121,13 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
 
         {/* Crate Obstacle Presets */}
         <div className="flex items-center gap-1.5 ml-1">
-          <Box className="w-3.5 h-3.5 text-slate-400" />
-          <span className="text-[11px] text-slate-400 hidden sm:inline">Crates:</span>
+          <Box className="w-3.5 h-3.5 text-slate-500" />
+          <span className="text-[11px] text-slate-600 font-medium hidden sm:inline">Crates:</span>
           <select
             id="crate-preset-select"
             value={engine.currentPreset}
             onChange={(e) => onSelectPreset(e.target.value as CratePreset)}
-            className="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2 py-1 outline-none focus:ring-1 focus:ring-cyan-500 font-medium"
+            className="bg-white border border-slate-300 text-slate-800 text-xs rounded-md px-2 py-1 outline-none focus:ring-1 focus:ring-blue-500 font-medium shadow-2xs cursor-pointer"
           >
             <option value="tactical">Tactical Bunker</option>
             <option value="pillars">6 Pillars Arena</option>
@@ -140,10 +140,10 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
           <button
             id="toolbar-open-experiments-btn"
             onClick={onOpenExperiments}
-            className="px-2.5 py-1 rounded-lg bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/60 text-cyan-300 font-semibold text-xs flex items-center gap-1.5 transition-all shadow-sm cursor-pointer ml-1"
+            className="px-2.5 py-1 rounded-md bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-semibold text-xs flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer ml-1"
             title="Open Controlled Experiments & Evaluation Protocols"
           >
-            <FlaskConical className="w-3.5 h-3.5 text-cyan-400" />
+            <FlaskConical className="w-3.5 h-3.5 text-blue-600" />
             <span>Experiments</span>
           </button>
         )}
@@ -152,16 +152,16 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
       {/* 2. NPC Algorithm Spawners */}
       <div className="flex items-center gap-2">
         {/* Fuzzy Spawner */}
-        <div className="flex items-center bg-cyan-950/40 border border-cyan-500/40 rounded-lg px-2 py-1 gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-sm bg-cyan-400" />
-          <span className="font-semibold text-cyan-300 text-[11px]">Fuzzy:</span>
-          <span className="font-mono text-cyan-200 font-bold w-3 text-center">{fuzzyCount}</span>
+        <div className="flex items-center bg-white border border-slate-200 rounded-md px-2 py-1 gap-1.5 shadow-2xs">
+          <div className="w-2.5 h-2.5 rounded-xs bg-cyan-500" />
+          <span className="font-semibold text-slate-700 text-[11px]">Fuzzy:</span>
+          <span className="font-mono text-slate-900 font-bold w-3 text-center">{fuzzyCount}</span>
           <div className="flex gap-0.5 ml-1">
             <button
               id="minus-fuzzy-btn"
               onClick={() => onRemoveNPCType('fuzzy')}
               disabled={fuzzyCount <= 0}
-              className="p-0.5 rounded hover:bg-cyan-800/50 text-cyan-400 disabled:opacity-30"
+              className="p-0.5 rounded hover:bg-slate-100 text-slate-600 disabled:opacity-30 cursor-pointer"
               title="Remove Fuzzy NPC"
             >
               <Minus className="w-3 h-3" />
@@ -169,7 +169,7 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
             <button
               id="plus-fuzzy-btn"
               onClick={() => onSpawnNPC('fuzzy')}
-              className="p-0.5 rounded hover:bg-cyan-800/50 text-cyan-400"
+              className="p-0.5 rounded hover:bg-slate-100 text-slate-700 cursor-pointer"
               title="Spawn Fuzzy NPC"
             >
               <Plus className="w-3 h-3" />
@@ -178,16 +178,16 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
         </div>
 
         {/* Behavior Tree Spawner */}
-        <div className="flex items-center bg-purple-950/40 border border-purple-500/40 rounded-lg px-2 py-1 gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-sm bg-purple-400" />
-          <span className="font-semibold text-purple-300 text-[11px]">BT:</span>
-          <span className="font-mono text-purple-200 font-bold w-3 text-center">{btCount}</span>
+        <div className="flex items-center bg-white border border-slate-200 rounded-md px-2 py-1 gap-1.5 shadow-2xs">
+          <div className="w-2.5 h-2.5 rounded-xs bg-indigo-500" />
+          <span className="font-semibold text-slate-700 text-[11px]">BT:</span>
+          <span className="font-mono text-slate-900 font-bold w-3 text-center">{btCount}</span>
           <div className="flex gap-0.5 ml-1">
             <button
               id="minus-bt-btn"
               onClick={() => onRemoveNPCType('behavior_tree')}
               disabled={btCount <= 0}
-              className="p-0.5 rounded hover:bg-purple-800/50 text-purple-400 disabled:opacity-30"
+              className="p-0.5 rounded hover:bg-slate-100 text-slate-600 disabled:opacity-30 cursor-pointer"
               title="Remove BT NPC"
             >
               <Minus className="w-3 h-3" />
@@ -195,7 +195,7 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
             <button
               id="plus-bt-btn"
               onClick={() => onSpawnNPC('behavior_tree')}
-              className="p-0.5 rounded hover:bg-purple-800/50 text-purple-400"
+              className="p-0.5 rounded hover:bg-slate-100 text-slate-700 cursor-pointer"
               title="Spawn BT NPC"
             >
               <Plus className="w-3 h-3" />
@@ -204,16 +204,16 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
         </div>
 
         {/* Simple Decision Spawner */}
-        <div className="flex items-center bg-amber-950/40 border border-amber-500/40 rounded-lg px-2 py-1 gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-sm bg-amber-400" />
-          <span className="font-semibold text-amber-300 text-[11px]">Simple:</span>
-          <span className="font-mono text-amber-200 font-bold w-3 text-center">{simpleCount}</span>
+        <div className="flex items-center bg-white border border-slate-200 rounded-md px-2 py-1 gap-1.5 shadow-2xs">
+          <div className="w-2.5 h-2.5 rounded-xs bg-amber-500" />
+          <span className="font-semibold text-slate-700 text-[11px]">Simple:</span>
+          <span className="font-mono text-slate-900 font-bold w-3 text-center">{simpleCount}</span>
           <div className="flex gap-0.5 ml-1">
             <button
               id="minus-simple-btn"
               onClick={() => onRemoveNPCType('simple')}
               disabled={simpleCount <= 0}
-              className="p-0.5 rounded hover:bg-amber-800/50 text-amber-400 disabled:opacity-30"
+              className="p-0.5 rounded hover:bg-slate-100 text-slate-600 disabled:opacity-30 cursor-pointer"
               title="Remove Simple NPC"
             >
               <Minus className="w-3 h-3" />
@@ -221,7 +221,7 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
             <button
               id="plus-simple-btn"
               onClick={() => onSpawnNPC('simple')}
-              className="p-0.5 rounded hover:bg-amber-800/50 text-amber-400"
+              className="p-0.5 rounded hover:bg-slate-100 text-slate-700 cursor-pointer"
               title="Spawn Simple NPC"
             >
               <Plus className="w-3 h-3" />
@@ -230,16 +230,16 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
         </div>
 
         {/* GOAP Planner Spawner */}
-        <div className="flex items-center bg-blue-950/40 border border-blue-500/40 rounded-lg px-2 py-1 gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-sm bg-blue-400" />
-          <span className="font-semibold text-blue-300 text-[11px]">GOAP:</span>
-          <span className="font-mono text-blue-200 font-bold w-3 text-center">{goapCount}</span>
+        <div className="flex items-center bg-white border border-slate-200 rounded-md px-2 py-1 gap-1.5 shadow-2xs">
+          <div className="w-2.5 h-2.5 rounded-xs bg-blue-500" />
+          <span className="font-semibold text-slate-700 text-[11px]">GOAP:</span>
+          <span className="font-mono text-slate-900 font-bold w-3 text-center">{goapCount}</span>
           <div className="flex gap-0.5 ml-1">
             <button
               id="minus-goap-btn"
               onClick={() => onRemoveNPCType('goap')}
               disabled={goapCount <= 0}
-              className="p-0.5 rounded hover:bg-blue-800/50 text-blue-400 disabled:opacity-30"
+              className="p-0.5 rounded hover:bg-slate-100 text-slate-600 disabled:opacity-30 cursor-pointer"
               title="Remove GOAP NPC"
             >
               <Minus className="w-3 h-3" />
@@ -247,7 +247,7 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
             <button
               id="plus-goap-btn"
               onClick={() => onSpawnNPC('goap')}
-              className="p-0.5 rounded hover:bg-blue-800/50 text-blue-400"
+              className="p-0.5 rounded hover:bg-slate-100 text-slate-700 cursor-pointer"
               title="Spawn GOAP NPC"
             >
               <Plus className="w-3 h-3" />
@@ -256,16 +256,16 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
         </div>
 
         {/* Utility AI Spawner */}
-        <div className="flex items-center bg-rose-950/40 border border-rose-500/40 rounded-lg px-2 py-1 gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-sm bg-rose-400" />
-          <span className="font-semibold text-rose-300 text-[11px]">Utility:</span>
-          <span className="font-mono text-rose-200 font-bold w-3 text-center">{utilityCount}</span>
+        <div className="flex items-center bg-white border border-slate-200 rounded-md px-2 py-1 gap-1.5 shadow-2xs">
+          <div className="w-2.5 h-2.5 rounded-xs bg-rose-500" />
+          <span className="font-semibold text-slate-700 text-[11px]">Utility:</span>
+          <span className="font-mono text-slate-900 font-bold w-3 text-center">{utilityCount}</span>
           <div className="flex gap-0.5 ml-1">
             <button
               id="minus-utility-btn"
               onClick={() => onRemoveNPCType('utility')}
               disabled={utilityCount <= 0}
-              className="p-0.5 rounded hover:bg-rose-800/50 text-rose-400 disabled:opacity-30"
+              className="p-0.5 rounded hover:bg-slate-100 text-slate-600 disabled:opacity-30 cursor-pointer"
               title="Remove Utility NPC"
             >
               <Minus className="w-3 h-3" />
@@ -273,7 +273,7 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
             <button
               id="plus-utility-btn"
               onClick={() => onSpawnNPC('utility')}
-              className="p-0.5 rounded hover:bg-rose-800/50 text-rose-400"
+              className="p-0.5 rounded hover:bg-slate-100 text-slate-700 cursor-pointer"
               title="Spawn Utility NPC"
             >
               <Plus className="w-3 h-3" />
@@ -288,22 +288,22 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
         <button
           id="damage-all-btn"
           onClick={onDamageAll}
-          className="px-2.5 py-1.5 rounded-lg bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/40 text-rose-300 font-medium text-xs flex items-center gap-1.5 transition-all"
+          className="px-2.5 py-1.5 rounded-md bg-white hover:bg-rose-50 border border-rose-300 text-rose-700 font-medium text-xs flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer"
           title="Force damage all enemies to immediately trigger retreat and healing driving algorithms"
         >
-          <Zap className="w-3.5 h-3.5 text-rose-400" />
+          <Zap className="w-3.5 h-3.5 text-rose-600" />
           <span className="hidden md:inline">Force</span> Low HP (Test Flee)
         </button>
 
         {/* Debug Gizmos Menu Toggles */}
-        <div className="flex items-center bg-slate-800 rounded-lg p-0.5 border border-slate-700">
+        <div className="flex items-center bg-slate-200/80 rounded-md p-0.5 border border-slate-300/80">
           <button
             id="toggle-whiskers-btn"
             onClick={() => toggleDebug('showRaycasts')}
-            className={`px-2 py-1 rounded text-[11px] font-medium transition-all ${
+            className={`px-2 py-1 rounded text-[11px] font-medium transition-all cursor-pointer ${
               debugSettings.showRaycasts
-                ? 'bg-cyan-600 text-white'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-slate-900 text-white shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
             title="Toggle Whisker Raycast Sensors"
           >
@@ -312,10 +312,10 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
           <button
             id="toggle-vectors-btn"
             onClick={() => toggleDebug('showSteeringVectors')}
-            className={`px-2 py-1 rounded text-[11px] font-medium transition-all ${
+            className={`px-2 py-1 rounded text-[11px] font-medium transition-all cursor-pointer ${
               debugSettings.showSteeringVectors
-                ? 'bg-cyan-600 text-white'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-slate-900 text-white shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
             title="Toggle Steering Velocity Vectors"
           >
@@ -324,10 +324,10 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
           <button
             id="toggle-targets-btn"
             onClick={() => toggleDebug('showTargetLines')}
-            className={`px-2 py-1 rounded text-[11px] font-medium transition-all ${
+            className={`px-2 py-1 rounded text-[11px] font-medium transition-all cursor-pointer ${
               debugSettings.showTargetLines
-                ? 'bg-cyan-600 text-white'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-slate-900 text-white shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
             title="Toggle Target Lines"
           >
@@ -336,10 +336,10 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
           <button
             id="toggle-badges-btn"
             onClick={() => toggleDebug('showAIStateBadges')}
-            className={`px-2 py-1 rounded text-[11px] font-medium transition-all ${
+            className={`px-2 py-1 rounded text-[11px] font-medium transition-all cursor-pointer ${
               debugSettings.showAIStateBadges
-                ? 'bg-cyan-600 text-white'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-slate-900 text-white shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
             title="Toggle Overhead AI State Badges"
           >
@@ -348,10 +348,10 @@ export const ControlsToolbar: React.FC<ControlsToolbarProps> = ({
           <button
             id="toggle-perf-graph-btn"
             onClick={() => toggleDebug('showPerformanceGraph')}
-            className={`px-2 py-1 rounded text-[11px] font-medium transition-all flex items-center gap-1 ${
+            className={`px-2 py-1 rounded text-[11px] font-medium transition-all flex items-center gap-1 cursor-pointer ${
               debugSettings.showPerformanceGraph
-                ? 'bg-cyan-600 text-white'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-slate-900 text-white shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
             title="Toggle Canvas Frame Time and AI Processing Load Graph"
           >

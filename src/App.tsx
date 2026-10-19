@@ -99,28 +99,28 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen bg-slate-950 text-slate-100 overflow-hidden font-sans">
+    <div className="flex flex-col h-screen w-screen bg-slate-100 text-slate-800 overflow-hidden font-sans">
       {/* Top Application Header */}
-      <header className="h-14 shrink-0 bg-slate-900 border-b border-slate-800 px-4 flex items-center justify-between z-20">
+      <header className="h-14 shrink-0 bg-white border-b border-slate-200 px-4 flex items-center justify-between z-20 shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-cyan-600/20 border border-cyan-500/50 flex items-center justify-center text-cyan-400 shadow-sm">
-            <BrainCircuit className="w-5 h-5" />
+          <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-white shadow-xs">
+            <BrainCircuit className="w-4.5 h-4.5" />
           </div>
           <div>
-            <h1 className="font-bold text-sm sm:text-base tracking-tight text-white flex items-center gap-2">
+            <h1 className="font-bold text-sm sm:text-base tracking-tight text-slate-900 flex items-center gap-2">
               <span>NPC Driving & Steering AI</span>
-              <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-normal border border-slate-700 hidden sm:inline">
-                Top-Down Survival Demo
+              <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-mono font-medium border border-slate-200 hidden sm:inline">
+                Evaluation Sandbox
               </span>
             </h1>
-            <p className="text-[11px] text-slate-400 hidden sm:block">
-              Comparing Fuzzy Logic, Behavior Trees, and Simple Decision Logic with Crate Obstacle Avoidance
+            <p className="text-[11px] text-slate-500 hidden sm:block">
+              Comparing Fuzzy Logic, Behavior Trees, Simple FSM, GOAP, and Utility AI
             </p>
           </div>
         </div>
 
         {/* Top View Mode Navigation Tabs */}
-        <div className="flex items-center bg-slate-800/80 p-1 rounded-lg border border-slate-700/80">
+        <div className="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200">
           <button
             id="tab-sandbox-btn"
             onClick={() => {
@@ -131,11 +131,11 @@ export default function App() {
             }}
             className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
               mainTab === 'sandbox'
-                ? 'bg-cyan-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Gamepad2 className="w-3.5 h-3.5" />
+            <Gamepad2 className="w-3.5 h-3.5 text-slate-700" />
             <span>Interactive Arena</span>
           </button>
           <button
@@ -143,28 +143,36 @@ export default function App() {
             onClick={() => setMainTab('experiments')}
             className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
               mainTab === 'experiments'
-                ? 'bg-cyan-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <FlaskConical className="w-3.5 h-3.5 text-cyan-300" />
+            <FlaskConical className="w-3.5 h-3.5 text-blue-600" />
             <span>Evaluation & Experiments</span>
           </button>
         </div>
 
         {/* Algorithm Legend Pill Badges */}
         <div className="hidden xl:flex items-center gap-2 text-xs">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/40 text-cyan-300">
-            <span className="w-2 h-2 rounded-sm bg-cyan-400" />
-            <span className="font-medium">Fuzzy AI</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-700 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-cyan-500" />
+            <span className="font-medium text-[11px]">Fuzzy Logic</span>
           </div>
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-950/60 border border-purple-500/40 text-purple-300">
-            <span className="w-2 h-2 rounded-sm bg-purple-400" />
-            <span className="font-medium">Behavior Tree</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-700 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-indigo-500" />
+            <span className="font-medium text-[11px]">Behavior Tree</span>
           </div>
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-950/60 border border-amber-500/40 text-amber-300">
-            <span className="w-2 h-2 rounded-sm bg-amber-400" />
-            <span className="font-medium">Simple FSM</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-700 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-amber-500" />
+            <span className="font-medium text-[11px]">Simple FSM</span>
+          </div>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-700 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-blue-500" />
+            <span className="font-medium text-[11px]">GOAP</span>
+          </div>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-700 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-rose-500" />
+            <span className="font-medium text-[11px]">Utility AI</span>
           </div>
         </div>
 
@@ -176,12 +184,12 @@ export default function App() {
               onClick={() => setShowMobilePanel(!showMobilePanel)}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 border transition-all ${
                 showMobilePanel
-                  ? 'bg-cyan-600 border-cyan-500 text-white'
-                  : 'bg-slate-800 border-slate-700 text-slate-300'
+                  ? 'bg-slate-900 border-slate-900 text-white'
+                  : 'bg-white border-slate-200 text-slate-700 shadow-xs'
               }`}
             >
               <Sliders className="w-3.5 h-3.5" />
-              {showMobilePanel ? 'Hide AI Panel' : 'Inspect AI'}
+              {showMobilePanel ? 'Hide Panel' : 'Inspect AI'}
             </button>
           )}
         </div>
@@ -205,7 +213,7 @@ export default function App() {
 
           {/* Main Simulation View & Docked Inspector Panel */}
           <div className="flex-1 flex overflow-hidden relative">
-            {/* Left/Main Simulation Arena */}
+            {/* Left/Main Simulation Arena - Map Canvas remains dark and unchanged */}
             <div className="flex-1 relative flex flex-col h-full bg-slate-950 overflow-hidden">
               <GameCanvas
                 engine={engine}
@@ -221,7 +229,7 @@ export default function App() {
             </div>
 
             {/* Right Docked AI Inspector Panel (Desktop) */}
-            <div className="hidden lg:block w-96 shrink-0 h-full border-l border-slate-800 z-10">
+            <div className="hidden lg:block w-96 shrink-0 h-full border-l border-slate-200 z-10 bg-white">
               <AIDebugPanel
                 engine={engine}
                 selectedNpc={selectedNpc}
@@ -232,7 +240,7 @@ export default function App() {
 
             {/* Mobile Slide-Over AI Inspector Panel */}
             {showMobilePanel && (
-              <div className="lg:hidden absolute inset-y-0 right-0 w-80 max-w-[90vw] z-30 shadow-2xl">
+              <div className="lg:hidden absolute inset-y-0 right-0 w-80 max-w-[90vw] z-30 shadow-2xl bg-white border-l border-slate-200">
                 <AIDebugPanel
                   engine={engine}
                   selectedNpc={selectedNpc}

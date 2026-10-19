@@ -32,11 +32,11 @@ export const GameHUD: React.FC<GameHUDProps> = ({ engine, onTriggerPulse, onRest
       {/* Top Left: Player Survival Stats */}
       <div className="pointer-events-auto absolute top-4 left-4 flex flex-col gap-2 max-w-xs">
         {/* Player Health Container */}
-        <div className="bg-slate-900/90 border border-slate-700/80 backdrop-blur-md rounded-xl p-3 shadow-lg space-y-2">
+        <div className="bg-slate-900/95 border border-slate-700/80 backdrop-blur-md rounded-lg p-3 shadow-lg space-y-2">
           <div className="flex items-center justify-between text-xs">
             <div className="flex items-center gap-1.5 font-bold text-slate-100">
-              <div className="w-3 h-3 rounded-sm bg-emerald-500" />
-              <span>PLAYER BOX (YOU)</span>
+              <div className="w-2.5 h-2.5 rounded-xs bg-emerald-500" />
+              <span className="tracking-wide text-[11px] uppercase">Player (You)</span>
             </div>
             <span
               className={`font-mono font-bold ${
@@ -48,7 +48,7 @@ export const GameHUD: React.FC<GameHUDProps> = ({ engine, onTriggerPulse, onRest
           </div>
 
           {/* Health Gauge */}
-          <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-700/80 p-0.5">
+          <div className="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden border border-slate-700/80 p-0.5">
             <div
               className={`h-full rounded-full transition-all duration-100 ${
                 hpRatio < 0.3 ? 'bg-rose-500' : 'bg-emerald-500'
@@ -58,45 +58,45 @@ export const GameHUD: React.FC<GameHUDProps> = ({ engine, onTriggerPulse, onRest
           </div>
 
           <div className="flex items-center justify-between text-[11px] text-slate-400">
-            <span className="flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-              Heals only via green orbs
+            <span className="flex items-center gap-1 text-[10px]">
+              <Sparkles className="w-3 h-3 text-emerald-400" />
+              Green orbs heal +25 HP
             </span>
-            <span className="font-mono text-emerald-300 font-semibold">
+            <span className="font-mono text-emerald-300 font-semibold text-[10px]">
               +{orbsCollected} picked
             </span>
           </div>
         </div>
 
         {/* Survival Timer Card */}
-        <div className="bg-slate-900/80 border border-slate-700/80 backdrop-blur-md rounded-xl px-3 py-2 shadow-md flex items-center justify-between text-xs">
-          <span className="text-slate-400 flex items-center gap-1.5 font-medium">
-            <Timer className="w-3.5 h-3.5 text-cyan-400" />
-            Survival Duration:
+        <div className="bg-slate-900/90 border border-slate-700/80 backdrop-blur-md rounded-lg px-3 py-1.5 shadow-md flex items-center justify-between text-xs">
+          <span className="text-slate-400 flex items-center gap-1.5 font-medium text-[11px]">
+            <Timer className="w-3.5 h-3.5 text-slate-300" />
+            Elapsed Time:
           </span>
-          <span className="font-mono font-bold text-cyan-300 text-sm">
+          <span className="font-mono font-bold text-white text-xs">
             {formatTime(survivalTime)}
           </span>
         </div>
       </div>
 
       {/* Bottom Left: Controls Quick Guide */}
-      <div className="pointer-events-auto absolute bottom-4 left-4 hidden sm:flex items-center gap-2 bg-slate-900/85 border border-slate-800 backdrop-blur-md px-3 py-1.5 rounded-xl text-[11px] text-slate-300 shadow-md">
+      <div className="pointer-events-auto absolute bottom-4 left-4 hidden sm:flex items-center gap-2 bg-slate-900/90 border border-slate-700/80 backdrop-blur-md px-3 py-1.5 rounded-lg text-[11px] text-slate-300 shadow-md">
         <div className="flex items-center gap-1">
-          <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] font-mono font-semibold text-slate-200">
+          <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-600 rounded text-[10px] font-mono font-semibold text-slate-200">
             WASD
           </kbd>
           <span>Move</span>
         </div>
         <span className="text-slate-600">•</span>
         <div className="flex items-center gap-1">
-          <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] font-mono font-semibold text-slate-200">
+          <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-600 rounded text-[10px] font-mono font-semibold text-slate-200">
             SPACE
           </kbd>
           <span>EMP Pulse</span>
         </div>
         <span className="text-slate-600">•</span>
-        <span className="text-slate-400">Click NPC to inspect math</span>
+        <span className="text-slate-400">Click NPC to inspect</span>
       </div>
 
       {/* Bottom Center: Shockwave Pulse Action Button */}
