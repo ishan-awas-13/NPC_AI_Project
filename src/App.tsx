@@ -108,7 +108,7 @@ export default function App() {
           </div>
           <div>
             <h1 className="font-bold text-sm sm:text-base tracking-tight text-slate-900 flex items-center gap-2">
-              <span>NPC Driving & Steering AI</span>
+              <span>NPC Arena - The AI Decision Lab</span>
               <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-mono font-medium border border-slate-200 hidden sm:inline">
                 Evaluation Sandbox
               </span>

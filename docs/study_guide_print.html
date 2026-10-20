@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NPC Steering & Driving AI - Comprehensive Study Guide & Viva Handbook</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    @page {
+      size: A4;
+      margin: 14mm 12mm 16mm 12mm;
+      @bottom-right {
+        content: "Page " counter(page);
+        font-family: 'Inter', sans-serif;
+        font-size: 8pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "NPC AI Architecture Study Guide & Viva Handbook";
+        font-family: 'Inter', sans-serif;
+        font-size: 8pt;
+        color: #64748b;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 9.5pt;
+      line-height: 1.55;
+      color: #1e293b;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      color: #0f172a;
+      font-weight: 700;
+      margin-top: 1.3em;
+      margin-bottom: 0.5em;
+      page-break-after: avoid;
+    }
+
+    h1 {
+      font-size: 18pt;
+      border-bottom: 2px solid #0284c7;
+      padding-bottom: 6px;
+      margin-top: 0;
+      color: #0f172a;
+    }
+
+    h2 {
+      font-size: 13.5pt;
+      color: #0369a1;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 1.4em;
+    }
+
+    h3 {
+      font-size: 11pt;
+      color: #0f172a;
+      margin-top: 1.1em;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 0.8em;
+    }
+
+    code, pre {
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 8.5pt;
+    }
+
+    code {
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 5px;
+      border-radius: 4px;
+      border: 1px solid #e2e8f0;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 10px 14px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin-bottom: 1em;
+      line-height: 1.45;
+      page-break-inside: avoid;
+    }
+
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      border: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1em 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 9px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    tr:nth-child(even) td {
+      background: #fdfdfe;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 7.5pt;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .badge-fsm { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .badge-bt { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+    .badge-fuzzy { background: #cffafe; color: #155e75; border: 1px solid #a5f3fc; }
+    .badge-goap { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+    .badge-utility { background: #ffe4e6; color: #9f1239; border: 1px solid #fecdd3; }
+
+    .callout {
+      background: #f0fdf4;
+      border-left: 4px solid #16a34a;
+      padding: 9px 13px;
+      margin: 1em 0;
+      border-radius: 0 6px 6px 0;
+      page-break-inside: avoid;
+      font-size: 9pt;
+    }
+
+    .callout-blue {
+      background: #f0f9ff;
+      border-left: 4px solid #0284c7;
+    }
+
+    .callout-amber {
+      background: #fffbeb;
+      border-left: 4px solid #d97706;
+    }
+
+    .card {
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 1em 0;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      page-break-inside: avoid;
+    }
+
+    .card-header {
+      font-weight: 700;
+      font-size: 10pt;
+      color: #0f172a;
+      margin-bottom: 6px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 4px;
+    }
+
+    .profiler-split {
+      display: flex;
+      flex-direction: row;
+      gap: 14px;
+      margin: 1.2em 0;
+      align-items: flex-start;
+      page-break-inside: avoid;
+    }
+
+    .profiler-img-box {
+      flex: 0 0 42%;
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 6px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .profiler-img-box img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      display: block;
+    }
+
+    .profiler-img-caption {
+      font-size: 7.5pt;
+      color: #94a3b8;
+      margin-top: 5px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .profiler-details {
+      flex: 1;
+      font-size: 8.5pt;
+    }
+
+    .qna-box {
+      margin-bottom: 11px;
+      padding-bottom: 9px;
+      border-bottom: 1px dashed #cbd5e1;
+      page-break-inside: avoid;
+    }
+
+    .qna-q {
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 3px;
+    }
+
+    .qna-a {
+      color: #334155;
+    }
+
+    .page-break {
+      page-break-after: always;
+    }
+
+    .math-eq {
+      font-family: 'JetBrains Mono', monospace;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 6px 10px;
+      border-radius: 4px;
+      display: block;
+      margin: 6px 0;
+      font-size: 8.5pt;
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cover / Header Title -->
+  <div style="margin-bottom: 18px;">
+    <h1>NPC Steering & Driving AI: Comprehensive Architecture Study Guide & Viva Handbook</h1>
+    <p style="font-size: 10.5pt; color: #475569; margin-top: 4px;">
+      <strong>Research Question:</strong> <em>"How does fuzzy-logic decision making affect NPC behavior compared with alternative AI decision architectures?"</em>
+    </p>
+    <div style="display: flex; gap: 8px; margin-top: 8px;">
+      <span class="badge badge-fsm">Finite State Machine (FSM)</span>
+      <span class="badge badge-bt">Behavior Trees (BT)</span>
+      <span class="badge badge-fuzzy">Fuzzy Logic Controller</span>
+      <span class="badge badge-goap">GOAP Planner</span>
+      <span class="badge badge-utility">Utility AI</span>
+    </div>
+  </div>
+
+  <!-- Special Section: Image & Detailed Profiler Panel Breakdown -->
+  <h2>Special In-Depth Breakdown: "AI Profiler & Frame Graph" Telemetry Panel</h2>
+  <p>
+    This floating telemetry panel renders at the bottom-right of the simulation arena (implemented in <code>src/components/PerformanceGraph.tsx</code> and powered by <code>src/game/PerformanceProfiler.ts</code>). It proves the real-time scalability of our AI architectures by measuring CPU microsecond execution costs alongside rendering cadence.
+  </p>
+
+  <div class="profiler-split">
+    <div class="profiler-img-box">
+      <img src="images/ai_profiler_panel.png" alt="AI Profiler & Frame Graph Panel">
+      <div class="profiler-img-caption">Live Telemetry HUD (src/components/PerformanceGraph.tsx)</div>
+    </div>
+    <div class="profiler-details">
+      <h3 style="margin-top: 0; font-size: 10pt; color: #0284c7;">Exact Panel Breakdown & Meaning</h3>
+      <p style="margin-bottom: 6px;">
+        <strong>1. FRAME CADENCE: <code>7.1ms (141 FPS)</code></strong><br>
+        Measured via <code>performance.now()</code>. Indicates the browser's hardware render cycle is running at 141 Hz. 60 FPS corresponds to 16.6ms. Since 7.1ms &lt; 16.6ms, it glows green.
+      </p>
+      <p style="margin-bottom: 6px;">
+        <strong>2. AI TICK LOAD: <code>5 μs (0.01ms)</code></strong><br>
+        Total CPU time across all active NPC AI routines during this tick. 5 μs = 0.000005s.
+      </p>
+      <p style="margin-bottom: 6px;">
+        <strong>3. BUDGET (16.6ms): <code>0.0%</code></strong><br>
+        Fraction of the 16.66ms frame window consumed by AI. Demonstrates that AI decision logic is lightweight enough to support hundreds of concurrent agents.
+      </p>
+      <p style="margin-bottom: 6px;">
+        <strong>4. Oscilloscope Canvas (Rolling Curves)</strong><br>
+        Cyan curve tracks frame render time over 100 frames. Purple curve at the very bottom tracks Total AI Load, visually demonstrating that AI computation is negligible compared to browser drawing.
+      </p>
+      <p style="margin-bottom: 0;">
+        <strong>5. Cost Insight Callout (Bottom Box)</strong><br>
+        Explains architectural trade-offs: GOAP uses $A^*$ graph search (8–10× FSM), while Simple FSM executes lowest (2.8 μs) but exhibits rigid transitions.
+      </p>
+    </div>
+  </div>
+
+  <table style="margin-top: 6px;">
+    <thead>
+      <tr>
+        <th style="width: 22%;">Algorithm</th>
+        <th style="width: 14%;">Measured Cost</th>
+        <th style="width: 14%;">Ratio vs FSM</th>
+        <th style="width: 50%;">Computational Reason & Code Origin</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Simple FSM</strong></td>
+        <td><code>2.8 μs</code></td>
+        <td><span class="badge badge-fsm">1.0× (Baseline)</span></td>
+        <td>Direct scalar <code>if-else</code> checks on health and distance (<code>src/ai/simpleLogic.ts</code>). Zero state search, O(1) complexity.</td>
+      </tr>
+      <tr>
+        <td><strong>GOAP Planner</strong></td>
+        <td><code>24.6 μs</code></td>
+        <td><span class="badge badge-goap">8.8×</span></td>
+        <td>Forward $A^*$ search over action preconditions & effects (<code>src/ai/goap.ts: L193-L232</code>). Clones world states and prioritizes open set.</td>
+      </tr>
+      <tr>
+        <td><strong>Utility AI</strong></td>
+        <td><code>27.9 μs</code></td>
+        <td><span class="badge badge-utility">10.0×</span></td>
+        <td>Calculates 4 mathematical response curves (Exponential, Logistic, Linear, Quadratic) and applies 12% inertia bonus (<code>src/ai/utility.ts</code>).</td>
+      </tr>
+      <tr>
+        <td><strong>Behavior Tree</strong></td>
+        <td><code>34.4 μs</code></td>
+        <td><span class="badge badge-bt">12.3×</span></td>
+        <td>Traverses composite Selector and Sequence nodes, evaluating dynamic predicates and action leaves (<code>src/ai/behaviorTree.ts</code>).</td>
+      </tr>
+      <tr>
+        <td><strong>Fuzzy Logic</strong></td>
+        <td><code>60.8 μs</code></td>
+        <td><span class="badge badge-fuzzy">21.7×</span></td>
+        <td><strong>Highest computational load.</strong> Evaluates continuous <code>trimf</code> & <code>trapmf</code> memberships, 5 Mamdani rules, and vector centroid defuzzification on every frame (<code>src/ai/fuzzy.ts</code>).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Part 1: Project Overview & Problem -->
+  <h2>Part 1: Project Overview & Core Research Question</h2>
+  <div class="callout callout-blue">
+    <strong>Research Problem:</strong> In video games, state machines create rigid boundary snapping (e.g. violent flip-flopping at exactly 30% HP). This project investigates how continuous <strong>Fuzzy Logic</strong> affects NPC behavior, smoothness, combat outcomes, and computational costs compared to FSM, Behavior Trees, GOAP, and Utility AI.
+  </div>
+  <p>
+    An <strong>NPC (Non-Player Character)</strong> in this project features two decoupled systems:
+  </p>
+  <ul>
+    <li><strong>Decision Brain:</strong> Evaluates environmental inputs (health, player distance, line-of-sight, whisker sensors) and outputs a <em>desired velocity vector</em> (V_desired).</li>
+    <li><strong>Steering Body (Craig Reynolds Model):</strong> Calculates bounded steering force: $\vec{F}_{\text{steering}} = \text{clampLength}(\vec{V}_{\text{desired}} - \vec{V}_{\text{current}}, F_{\text{max}})$, creating smooth acceleration, natural cornering, and physical inertia.</li>
+  </ul>
+
+  <!-- Part 2: Simulation Tick Lifecycle -->
+  <h2>Part 2: Complete Simulation Tick Lifecycle (src/game/GameEngine.ts)</h2>
+  <p>
+    The game loop runs via <code>requestAnimationFrame</code>. Every tick inside <code>GameEngine.update(rawDt)</code> follows this strict sequence:
+  </p>
+  <div class="card">
+    <ol style="margin: 0; padding-left: 20px;">
+      <li><strong>Delta Time & Clock:</strong> Clamps Δt ≤ 0.05s to prevent physics tunneling; starts profiler frame timer.</li>
+      <li><strong>Opponent Logic:</strong> In experiment mode, executes <code>updateAutomatedPlayer()</code> (deterministic kiting at 180px, automated EMP pulse shockwave at 135px).</li>
+      <li><strong>Whisker Raycasting:</strong> 5 ray sensors per NPC cast against crate bounding boxes (<code>Math2D.rayIntersectAABB</code>).</li>
+      <li><strong>AI Deliberation:</strong> Executes the selected architecture (Fuzzy, BT, FSM, GOAP, or Utility) and records microseconds.</li>
+      <li><strong>Flocking & Stamina:</strong> Applies inverse-square separation between NPCs to prevent stacking; depletes aggression stamina over 4s.</li>
+      <li><strong>Physics Integration:</strong> Velocity integration (V += F · Δt), speed clamping, and AABB crate collision clamping.</li>
+      <li><strong>Shrine & Combat Resolution:</strong> Heals NPCs inside shrines (25–30 HP/s); applies contact damage to player (22 HP/s).</li>
+      <li><strong>Trial Metrics Evaluation:</strong> In experiment mode, accumulates distance, debounces attacks, and finalizes trial on death or timeout.</li>
+    </ol>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- Part 3: TypeScript for B.Tech CS Students -->
+  <h2>Part 3: TypeScript Essentials for B.Tech Students</h2>
+  <table style="font-size: 8.5pt;">
+    <thead>
+      <tr>
+        <th style="width: 25%;">TypeScript Concept</th>
+        <th style="width: 40%;">Code Sample from Project</th>
+        <th style="width: 35%;">Java / C++ Equivalent</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong><code>const</code> vs <code>let</code></strong></td>
+        <td><code>const d = Math2D.dist(a, b);<br>let moveX = 0;</code></td>
+        <td><code>const float d;</code> in C++ or <code>final double d;</code> in Java. Block-scoped immutable reference.</td>
+      </tr>
+      <tr>
+        <td><strong>Interface</strong></td>
+        <td><code>export interface Vector2 {<br>&nbsp;&nbsp;x: number;<br>&nbsp;&nbsp;y: number;<br>}</code></td>
+        <td>Like a <code>struct</code> in C++ or a pure data <code>class</code> in Java. Defines object shape; zero runtime overhead.</td>
+      </tr>
+      <tr>
+        <td><strong>Union Types</strong></td>
+        <td><code>type AIType = 'fuzzy' | 'behavior_tree' | 'simple' | 'goap' | 'utility';</code></td>
+        <td>Like a type-safe <code>enum</code> in Java/C++. Restricts string values to exact allowed options.</td>
+      </tr>
+      <tr>
+        <td><strong>Nullable & Optional</strong></td>
+        <td><code>nearestHeal: HealingStation | null;<br>aggressionStamina?: number;</code></td>
+        <td>Explicit null-safety (like <code>std::optional&lt;T&gt;</code> in C++ or <code>Optional&lt;T&gt;</code> in Java). Prevents null pointer crashes.</td>
+      </tr>
+      <tr>
+        <td><strong>Arrow Functions</strong></td>
+        <td><code>const survivals = trials.map(t =&gt; t.survivalTime);</code></td>
+        <td>Lambda expressions: <code>trials.stream().map(t -&gt; t.survivalTime)</code> in Java, or list comprehension in Python.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Part 4: The Five AI Architectures Deep-Dive -->
+  <h2>Part 4: The Five AI Architectures: Deep In-Depth Analysis</h2>
+
+  <!-- 4.1 Simple FSM -->
+  <h3>4.1 Finite State Machine (FSM) / Simple Decision Logic (<code>src/ai/simpleLogic.ts</code>)</h3>
+  <div class="card">
+    <div class="card-header">Core Mechanism: Hard Threshold If-Else Ladder</div>
+    <p>
+      Evaluates discrete scalar checks:
+    </p>
+    <div class="math-eq">
+      if (health &le; 30% || (isHealing &amp;&amp; health &lt; 75%)) &rarr; FLEE_TO_HEAL<br>
+      else if (isExhausted) &rarr; EXHAUSTED_STANDOFF<br>
+      else &rarr; DIRECT_CHASE
+    </div>
+    <p>
+      <strong>Obstacle Avoidance:</strong> Checks only the single center forward ray sensor. If <code>hitDistance &lt; 50px</code>, it projects target direction onto the wall surface tangent (<code>OBSTACLE_SLIDE</code>).
+    </p>
+    <p>
+      <strong>Strengths & Weaknesses:</strong> Extremely low CPU load (2.8 μs). Weakness: Rigid behavior and sudden boundary snapping.
+    </p>
+  </div>
+
+  <!-- 4.2 Behavior Tree -->
+  <h3>4.2 Behavior Trees (<code>src/ai/behaviorTree.ts</code>)</h3>
+  <div class="card">
+    <div class="card-header">Core Mechanism: Hierarchical Selector & Sequence Traversal</div>
+    <p>
+      Organized into a Root Priority Selector (evaluates high-level goals from left to right):
+    </p>
+    <ul>
+      <li><strong>Branch 1 (Priority 1 - Survival Sequence):</strong> <code>Is Health &lt; 35%?</code> &rarr; <code>Navigate to Heal Station</code> (boosts retreat speed by 1.25×).</li>
+      <li><strong>Branch 2 (Priority 2 - Fatigue Sequence):</strong> <code>Is Agent Exhausted?</code> &rarr; <code>Disengage & Catch Breath</code> (maintains 180px standoff, 55% speed).</li>
+      <li><strong>Branch 3 (Priority 3 - Cover Clearance Sequence):</strong> <code>Player Behind Crate?</code> (raycast check) &rarr; <code>Navigate Around Crate Corner</code> (evaluates all 4 crate corners).</li>
+      <li><strong>Branch 4 (Fallback Action):</strong> <code>Predictive Whisker Chase</code> (5-ray whisker deflection with quadratic urgency).</li>
+    </ul>
+    <p>
+      <strong>Strengths & Weaknesses:</strong> Modular, readable, and highly maintainable (34.4 μs). Weakness: Still discrete; transitions can feel stepped.
+    </p>
+  </div>
+
+  <!-- 4.3 Fuzzy Logic Controller -->
+  <h3>4.3 Fuzzy Logic Controller (<code>src/ai/fuzzy.ts</code>)</h3>
+  <div class="card">
+    <div class="card-header">Core Mechanism: Continuous Membership & Vector Weighted Centroid</div>
+    <p>
+      <strong>1. Fuzzification Equations:</strong><br>
+      Triangular: trimf(x; a, b, c) = max(0, min((x - a) / (b - a), (c - x) / (c - b)))<br>
+      Trapezoidal: trapmf(x; a, b, c, d) = max(0, min((x - a) / (b - a), 1, (d - x) / (d - c)))
+    </p>
+    <p>
+      <strong>2. The 5 Continuous Rules:</strong>
+    </p>
+    <div class="math-eq">
+      Rule 1: w_retreat = healthLow<br>
+      Rule 2: w_flank = min(healthMed, distNear)<br>
+      Rule 3: w_balanced = min(healthMed, max(distMed, distFar))<br>
+      Rule 4: w_aggressive = min(healthHigh, distFar)<br>
+      Rule 5: w_relentless = min(healthHigh, max(distNear, distMed))
+    </div>
+    <p>
+      <strong>3. Vector Defuzzification:</strong><br>
+      D_blended = Σ(w_i · k_i · V_i) / Σ(w_i · k_i)
+      Where $k_{\text{retreat}}=1.6, k_{\text{flank}}=1.1, k_{\text{balanced}}=1.0, k_{\text{aggressive}}=1.3, k_{\text{relentless}}=1.4$.<br>
+      Obstacle avoidance is continuously injected: D_final = normalize(D_blended + (1.4 + 1.5 · Danger_obstacle) · F_avoid).
+    </p>
+    <p>
+      <strong>Worked Example (HP=35%, Dist=150px):</strong><br>
+      <code>healthLow = 0.50</code>, <code>healthMed = 0.20</code>, <code>distNear = 0.25</code>, <code>distMed = 0.40</code>.<br>
+      Weights: Retreat = 0.50 ($0.80$), Flank = 0.20 ($0.22$), Balanced = 0.20 ($0.20$). Total = 1.22.<br>
+      <strong>Result: 65% Retreat, 18% Flank, 17% Chase.</strong> NPC angles away smoothly toward shrine without snapping!
+    </p>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- 4.4 GOAP Planner -->
+  <h3>4.4 Goal-Oriented Action Planning (GOAP) (<code>src/ai/goap.ts</code>)</h3>
+  <div class="card">
+    <div class="card-header">Core Mechanism: A* Forward Search in World-State Space</div>
+    <p>
+      World states are boolean atom dictionaries (e.g. <code>{ isHealthy, atHealingStation, inCombatRange, hasLineOfSight }</code>).
+    </p>
+    <ul>
+      <li><strong>Goals:</strong> <code>Survive & Regenerate</code> (Priority 95 if HP &le; 35), <code>Flank Obscured Player</code> (Priority 70 if no LOS), <code>Strike Player</code> (Priority 50).</li>
+      <li><strong>Actions Pool:</strong> <code>Navigate to Healing Shrine</code>, <code>Regenerate HP in Shrine</code>, <code>Corner Flank Maneuver</code>, <code>Predictive Intercept Gap</code>, <code>Melee Pounce Attack</code>.</li>
+      <li><strong>Planner:</strong> Executes $A^*$ forward search finding the lowest-cost sequence whose chained preconditions and effects transform current world state into the desired goal state. Cost: $24.6\mu\text{s}$.</li>
+    </ul>
+  </div>
+
+  <!-- 4.5 Utility AI -->
+  <h3>4.5 Utility AI (<code>src/ai/utility.ts</code>)</h3>
+  <div class="card">
+    <div class="card-header">Core Mechanism: Mathematical Response Curves & Inertia Damping</div>
+    <p>
+      Every action computes a continuous utility score U ∈ [0.0, 1.0]:
+    </p>
+    <ul>
+      <li><strong>Heal Station Retreat (Exponential Curve):</strong> U = min(1.0, (1 - hpRatio)^2.2 × 1.4 × distFactor) × 1.25.</li>
+      <li><strong>Corner Flank (Logistic Sigmoid Curve):</strong> $U = 0.82 \times \frac{1}{1 + e^{-6(d_{\text{norm}} - 0.3)}} \times \text{hpRatio}$.</li>
+      <li><strong>Predictive Intercept (Linear Curve):</strong> $U = (0.45 + 0.35 \cdot d_{\text{norm}} + \text{motionBonus}) \times \text{hpRatio}$.</li>
+      <li><strong>Melee Pounce (Quadratic Curve):</strong> U = (1 - d / 180)^2 × 0.95 × confidence × stamina × 1.15.</li>
+      <li><strong>Inertia Hysteresis Bonus:</strong> Previously active action receives a +0.12 (12%) bonus to eliminate rapid high-frequency action flickering. Cost: $27.9\mu\text{s}$.</li>
+    </ul>
+  </div>
+
+  <!-- Part 5: Direct Comparison Matrix -->
+  <h2>Part 5: Direct Comparison Across All Five Architectures</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Feature / Dimension</th>
+        <th>Simple FSM</th>
+        <th>Behavior Tree</th>
+        <th>Fuzzy Logic</th>
+        <th>GOAP Planner</th>
+        <th>Utility AI</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Representation</strong></td>
+        <td>Discrete states</td>
+        <td>Hierarchical composite tree</td>
+        <td>Continuous membership & rules</td>
+        <td>Action preconditions & effects</td>
+        <td>Mathematical response curves</td>
+      </tr>
+      <tr>
+        <td><strong>Action Selection</strong></td>
+        <td>Hard if-else ladder</td>
+        <td>Priority Selector traversal</td>
+        <td>Mamdani min-max rule blend</td>
+        <td>A* state-space plan search</td>
+        <td>Argmax(Utility + Inertia)</td>
+      </tr>
+      <tr>
+        <td><strong>Transition Quality</strong></td>
+        <td>Rigid / snapping</td>
+        <td>Discrete steps</td>
+        <td><strong>Completely smooth vector blend</strong></td>
+        <td>Step-by-step plan execution</td>
+        <td>Continuous with inertia damping</td>
+      </tr>
+      <tr>
+        <td><strong>Competing Pressures</strong></td>
+        <td>Fails (only 1 state active)</td>
+        <td>Strict priority override</td>
+        <td><strong>Proportional multi-goal blend</strong></td>
+        <td>Sequential sub-goal chaining</td>
+        <td>Multi-consideration weighting</td>
+      </tr>
+      <tr>
+        <td><strong>CPU Cost (Measured)</strong></td>
+        <td><strong>2.8 μs (1.0×)</strong></td>
+        <td>34.4 μs (12.3×)</td>
+        <td>60.8 μs (21.7×)</td>
+        <td>24.6 μs (8.8×)</td>
+        <td>27.9 μs (10.0×)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Part 6: Experimental Methodology & Fairness -->
+  <h2>Part 6: Experimental Methodology, Scenarios & Fairness</h2>
+  <div class="callout callout-amber">
+    <strong>Elimination of Confounding Variables:</strong> In experimental trials, all 5 AI models run against an identical automated benchmark bot (<code>updateAutomatedPlayer</code>) with exact starting coordinates, identical deterministic seeds (Seed = 100000 + trialIdx · 37), and identical physical limits.
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Scenario ID & Name</th>
+        <th>Time Limit</th>
+        <th>Geometry & Initial State</th>
+        <th>What It Scientifically Tests</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1. Open Arena</strong></td>
+        <td>30s</td>
+        <td>No obstacles, no shrines. 100 HP each.</td>
+        <td>Raw pursuit speed, intercept accuracy, and combat efficiency without barriers.</td>
+      </tr>
+      <tr>
+        <td><strong>2. Obstacle Arena</strong></td>
+        <td>35s</td>
+        <td>6 symmetrical pillar grid.</td>
+        <td>Continuous 5-ray whisker obstacle avoidance and steering fluidity around static blocks.</td>
+      </tr>
+      <tr>
+        <td><strong>3. Corridors & Chokes</strong></td>
+        <td>40s</td>
+        <td>5 choke barriers and narrow passages.</td>
+        <td>Spatial adaptation, tight cornering, and navigation resilience under spatial constraints.</td>
+      </tr>
+      <tr>
+        <td><strong>4. Low-Health Survival</strong></td>
+        <td>35s</td>
+        <td>3 bunkers, 1 NW shrine. <strong>NPC starts at 25% HP</strong>.</td>
+        <td>Self-preservation triggering, retreat execution, and pathfinding to healing stations under crisis.</td>
+      </tr>
+      <tr>
+        <td><strong>5. Healing Shrines</strong></td>
+        <td>40s</td>
+        <td>2 crates, 2 shrines. Both start at 50% HP.</td>
+        <td>Dynamic trade-off between pursuing wounded opponent vs retreating to recover health.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-break"></div>
+
+  <!-- Part 7: Metrics & CSV Export -->
+  <h2>Part 7: Performance Metrics, Statistical Analysis & CSV Export</h2>
+  <p>
+    The platform collects 8 primary metrics in <code>src/game/TrialMetricsCollector.ts</code>:
+  </p>
+  <ul>
+    <li><strong>Survival Time ($T_{\text{surv}}$):</strong> Seconds survived before death or timeout ($[0, T_{\text{limit}}]$).</li>
+    <li><strong>Damage Dealt ($D_{\text{dealt}}$):</strong> Cumulative HP stripped from player (22 HP/s melee rate).</li>
+    <li><strong>Damage Received ($D_{\text{recv}}$):</strong> Cumulative damage absorbed from player's EMP shockwave pulses (35 HP/blast).</li>
+    <li><strong>Attacks / Retreats Count:</strong> Debounced melee contacts (0.4s cooldown) and edge-triggered retreat transitions.</li>
+    <li><strong>Distance Travelled:</strong> Cumulative Euclidean path length ($\sum \sqrt{\Delta x^2 + \Delta y^2}$).</li>
+    <li><strong>Sample Mean ($\bar{x}$) & Standard Deviation ($s$):</strong> s = √[ (1 / (N - 1)) · Σ(x_i - x̄)² ]. Measures behavioral consistency.</li>
+  </ul>
+  <p>
+    Data exports directly to standard RFC-4180 CSV via <code>exportTrialsToCSV()</code> for analysis in Python (Pandas/Matplotlib).
+  </p>
+
+  <!-- Part 8: Top Viva Defense Questions -->
+  <h2>Part 8: Top 15 Viva Questions & Defensible Answers</h2>
+
+  <div class="qna-box">
+    <div class="qna-q">1. What is the fundamental research question of your project?</div>
+    <div class="qna-a">"How does fuzzy-logic decision making affect NPC behavior compared with alternative AI decision architectures?" We investigate whether continuous degree-of-truth blending eliminates rigid threshold snapping and improves navigation fluidity in combat steering NPCs.</div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-q">2. Why does the AI Profiler show Fuzzy Logic taking ~60.8μs compared to 2.8μs for Simple FSM?</div>
+    <div class="qna-a">FSM executes a single scalar if-else check and immediately exits (O(1)). Fuzzy Logic must compute continuous mathematical memberships across all sets, evaluate 5 continuous Mamdani rules, construct candidate geometric vectors, and compute a vector centroid normalization on every single frame.</div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-q">3. Is defuzzification in your project Sugeno or Mamdani?</div>
+    <div class="qna-a">It is Mamdani-style continuous inference using Vector Weighted Centroid defuzzification. Rule firing strengths scale continuous directional vectors, and their normalized weighted vector sum forms the final desired velocity.</div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-q">4. How does your system ensure fair benchmarking between the 5 AI architectures?</div>
+    <div class="qna-a">In experiment mode, human player input is replaced by a deterministic automated bot executing exact kiting and EMP pulse defenses. All NPCs share identical physics, max speeds, ray sensors, deterministic seeds, and spawn coordinates across 5 standardized scenario maps.</div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-q">5. What is the role of Craig Reynolds' Steering Model in your architecture?</div>
+    <div class="qna-a">It decouples cognitive decision-making from physics. The AI brain only outputs a desired velocity (V_desired). Reynolds steering calculates $\vec{F} = \vec{V}_{\text{desired}} - \vec{V}_{\text{actual}}$, applying physical acceleration, mass, and cornering momentum.</div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-q">6. How does Utility AI avoid violent toggling between actions with close scores?</div>
+    <div class="qna-a">Through inertia hysteresis (<code>src/ai/utility.ts: L190-L218</code>). The currently active action receives a +0.12 (12%) inertia bonus, requiring competing actions to be significantly more useful before a switch is triggered.</div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-q">7. How does GOAP handle dynamic obstacle occlusion?</div>
+    <div class="qna-a">GOAP checks <code>hasLineOfSight</code> atom on every tick. If an obstacle blocks line of sight, the <code>Corner Flank Maneuver</code> action becomes eligible, calculating pathing around the obstacle's closest corner.</div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-q">8. What is the difference between a Selector and a Sequence in a Behavior Tree?</div>
+    <div class="qna-a">A Selector implements logical OR (ticks children until one returns SUCCESS or RUNNING). A Sequence implements logical AND (ticks children until one returns FAILURE or RUNNING).</div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-q">9. Why is high damage dealt alone insufficient to claim an AI is "better"?</div>
+    <div class="qna-a">An NPC could suicidal-rush the player and inflict high damage before dying in 3 seconds. True AI competence requires balancing damage output with survival time, health management, and retreat execution.</div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-q">10. What does the sample standard deviation (s) in your CSV metrics represent?</div>
+    <div class="qna-a">It measures behavioral variance across seeds. Low standard deviation indicates deterministic stability; high standard deviation indicates sensitivity to geometry or spatial trapping.</div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-q">11. What is the Aggression Stamina system?</div>
+    <div class="qna-a">When sprinting or in close-range aggressive pursuit, stamina drains over 4 seconds. When empty, <code>isExhausted</code> drops top speed to 55% for ~5 seconds, giving the player an escape window and creating tactical pacing.</div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-q">12. How does whisker obstacle avoidance work mathematically?</div>
+    <div class="qna-a">5 ray sensors cast at 0°, ±24°, ±49°. Repulsive normal force scales quadratically: $F_{\text{avoid}} \propto (1 - d/L)^2$, creating subtle nudges at long distance and emergency evasions at close distance.</div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-q">13. What is the main limitation of your Fuzzy Logic implementation?</div>
+    <div class="qna-a">Membership parameters (the $a,b,c,d$ values in `trimf`/`trapmf`) are statically hand-tuned. In future work, these could be auto-optimized using Genetic Algorithms or Adaptive Neuro-Fuzzy Inference Systems (ANFIS).</div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-q">14. Why use TypeScript and HTML5 Canvas instead of Unity or Unreal?</div>
+    <div class="qna-a">Zero engine bloat, 100% transparent algorithmic code, and immediate cross-platform execution in any web browser without binary installation. We have direct mathematical control over every vector, raycast, and microsecond timer.</div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-q">15. What is your 2-minute elevator pitch conclusion?</div>
+    <div class="qna-a">Fuzzy Logic costs 21× more CPU than simple FSM (60 μs vs 2.8 μs), but both comfortably fit within the 16.6ms 60 FPS frame budget (&lt;0.5%). In exchange for this negligible microsecond cost, Fuzzy Logic completely eliminates threshold jitter and delivers superior, organic multi-goal navigation.</div>
+  </div>
+
+  <!-- Part 9: 7-Day Study Plan & Summary -->
+  <h2>Part 9: 7-Day Study Plan for Exam & Viva Week</h2>
+  <table style="font-size: 8pt;">
+    <thead>
+      <tr>
+        <th>Day</th>
+        <th>Topics to Master</th>
+        <th>Source Files to Inspect</th>
+        <th>Checklist Self-Test Goal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Day 1</strong></td>
+        <td>Project Motivation, Research Question, Profiler Panel</td>
+        <td><code>PerformanceProfiler.ts</code>, <code>PerformanceGraph.tsx</code></td>
+        <td>Explain all badges and curves in the Telemetry HUD.</td>
+      </tr>
+      <tr>
+        <td><strong>Day 2</strong></td>
+        <td>Simulation Loop, Physics, Whiskers, Stamina</td>
+        <td><code>GameEngine.ts: L457-L895</code>, <code>types.ts</code></td>
+        <td>Trace a full tick from sensing to Reynolds integration.</td>
+      </tr>
+      <tr>
+        <td><strong>Day 3</strong></td>
+        <td>Simple FSM vs Behavior Trees</td>
+        <td><code>simpleLogic.ts</code>, <code>behaviorTree.ts</code></td>
+        <td>Explain why FSM jitters and trace BT Selector/Sequence.</td>
+      </tr>
+      <tr>
+        <td><strong>Day 4</strong></td>
+        <td>Fuzzy Logic Masterclass</td>
+        <td><code>fuzzy.ts</code></td>
+        <td>Calculate worked numerical example by hand with trimf/trapmf.</td>
+      </tr>
+      <tr>
+        <td><strong>Day 5</strong></td>
+        <td>GOAP Planner vs Utility AI</td>
+        <td><code>goap.ts</code>, <code>utility.ts</code></td>
+        <td>Walk through A* plan generation and inertia bonus curves.</td>
+      </tr>
+      <tr>
+        <td><strong>Day 6</strong></td>
+        <td>Scenarios, Opponent Logic, Fairness, CSV Metrics</td>
+        <td><code>ExperimentManager.ts</code>, <code>experimentScenarios.ts</code></td>
+        <td>Defend why the automated opponent prevents testing bias.</td>
+      </tr>
+      <tr>
+        <td><strong>Day 7</strong></td>
+        <td>Mock Viva & Spoken Pitch</td>
+        <td>Study Guide Part 10 (All 15 Questions)</td>
+        <td>Deliver the 2-minute pitch out loud without hesitation.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="text-align: center; margin-top: 25px; padding-top: 10px; border-top: 1px solid #cbd5e1; font-size: 8pt; color: #64748b;">
+    <strong>NPC Steering & Driving AI Project</strong> &bull; B.Tech Computer Science &bull; Academic Viva & Evaluation Handbook
+  </div>
+
+</body>
+</html>

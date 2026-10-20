@@ -23,6 +23,9 @@ env/
 # Presentation & Deck Generation Scripts
 *.pptx
 generate_deck.py
+NPC_AI_Project_Presentation_8slides.pdf
+
 
 # Local logs & benchmark exports
 logs/
+scratch/
