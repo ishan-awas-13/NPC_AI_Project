@@ -1,0 +1,51 @@
+experiment_id,trial,ai_system,map,seed,survival_time,damage_dealt,damage_received,npc_win,player_win,attacks,retreats,distance_travelled,duration,final_npc_health,final_player_health,outcome,timestamp
+exp_1793360075541,1,Simple Decision AI,Scenario 1: Open Arena,100037,30.01,0,17,0,1,0,0,2440.1,30.01,83,100,"Player Win",1793360076656
+exp_1793360075541,2,Simple Decision AI,Scenario 1: Open Arena,100074,30,0,17,0,1,0,0,2437.3,30,83,100,"Player Win",1793360077638
+exp_1793360075541,3,Simple Decision AI,Scenario 1: Open Arena,100111,30,0,17,0,1,0,0,2440.8,30,83,100,"Player Win",1793360078472
+exp_1793360075541,4,Simple Decision AI,Scenario 1: Open Arena,100148,30.01,0,17,0,1,0,0,2443.4,30.01,83,100,"Player Win",1793360079279
+exp_1793360075541,5,Simple Decision AI,Scenario 1: Open Arena,100185,30,0,17,0,1,0,0,2437.9,30,83,100,"Player Win",1793360080190
+exp_1793360075541,6,Simple Decision AI,Scenario 1: Open Arena,100222,30.01,0,17,0,1,0,0,2432.6,30.01,83,100,"Player Win",1793360081220
+exp_1793360075541,7,Simple Decision AI,Scenario 1: Open Arena,100259,30.01,0,17,0,1,0,0,2435.7,30.01,83,100,"Player Win",1793360082119
+exp_1793360075541,8,Simple Decision AI,Scenario 1: Open Arena,100296,30.01,0,17,0,1,0,0,2443.8,30.01,83,100,"Player Win",1793360082922
+exp_1793360075541,9,Simple Decision AI,Scenario 1: Open Arena,100333,30.02,0,17,0,1,0,0,2440.3,30.02,83,100,"Player Win",1793360083762
+exp_1793360075541,10,Simple Decision AI,Scenario 1: Open Arena,100370,30.01,0,17,0,1,0,0,2431.7,30.01,83,100,"Player Win",1793360084804
+exp_1793360075541,1,Behavior Tree AI,Scenario 1: Open Arena,100037,30.01,23.7,83,0,1,1,0,2298.9,30.01,17,76,"Player Win",1793360085813
+exp_1793360075541,2,Behavior Tree AI,Scenario 1: Open Arena,100074,30,21.4,86,0,1,1,0,2296.4,30,14,79,"Player Win",1793360086605
+exp_1793360075541,3,Behavior Tree AI,Scenario 1: Open Arena,100111,30.01,20.5,84,0,1,1,0,2285.8,30.01,16,80,"Player Win",1793360087405
+exp_1793360075541,4,Behavior Tree AI,Scenario 1: Open Arena,100148,30.01,15.9,87,0,1,1,0,2231.8,30.01,13,84,"Player Win",1793360088348
+exp_1793360075541,5,Behavior Tree AI,Scenario 1: Open Arena,100185,30,21.7,84,0,1,1,0,2286.1,30,16,78,"Player Win",1793360089399
+exp_1793360075541,6,Behavior Tree AI,Scenario 1: Open Arena,100222,30.01,29.6,85,0,1,1,0,2310.4,30.01,15,70,"Player Win",1793360090243
+exp_1793360075541,7,Behavior Tree AI,Scenario 1: Open Arena,100259,30.01,23.6,84,0,1,1,0,2308.4,30.01,16,76,"Player Win",1793360091046
+exp_1793360075541,8,Behavior Tree AI,Scenario 1: Open Arena,100296,30.01,19.4,85,0,1,1,0,2275.7,30.01,15,81,"Player Win",1793360091884
+exp_1793360075541,9,Behavior Tree AI,Scenario 1: Open Arena,100333,30,21,83,0,1,1,0,2270.2,30,17,79,"Player Win",1793360092908
+exp_1793360075541,10,Behavior Tree AI,Scenario 1: Open Arena,100370,30,21.2,83,0,1,1,0,2292.2,30,17,79,"Player Win",1793360093871
+exp_1793360075541,1,Fuzzy Logic AI,Scenario 1: Open Arena,100037,30.01,0,17,0,1,0,1,2362.9,30.01,83,100,"Player Win",1793360094686
+exp_1793360075541,2,Fuzzy Logic AI,Scenario 1: Open Arena,100074,30.01,0,17,0,1,0,1,2360.8,30.01,83,100,"Player Win",1793360095523
+exp_1793360075541,3,Fuzzy Logic AI,Scenario 1: Open Arena,100111,30,0,17,0,1,0,1,2356.6,30,83,100,"Player Win",1793360096512
+exp_1793360075541,4,Fuzzy Logic AI,Scenario 1: Open Arena,100148,30.02,0,17,0,1,0,1,2357.3,30.02,83,100,"Player Win",1793360097519
+exp_1793360075541,5,Fuzzy Logic AI,Scenario 1: Open Arena,100185,30.01,0,17,0,1,0,1,2342.6,30.01,83,100,"Player Win",1793360098341
+exp_1793360075541,6,Fuzzy Logic AI,Scenario 1: Open Arena,100222,30.02,0,17,0,1,0,1,2362.7,30.02,83,100,"Player Win",1793360099130
+exp_1793360075541,7,Fuzzy Logic AI,Scenario 1: Open Arena,100259,30.01,0,17,0,1,0,1,2371.9,30.01,83,100,"Player Win",1793360099928
+exp_1793360075541,8,Fuzzy Logic AI,Scenario 1: Open Arena,100296,30.01,0,17,0,1,0,1,2356.2,30.01,83,100,"Player Win",1793360100731
+exp_1793360075541,9,Fuzzy Logic AI,Scenario 1: Open Arena,100333,30,0,17,0,1,0,1,2342.2,30,83,100,"Player Win",1793360101540
+exp_1793360075541,10,Fuzzy Logic AI,Scenario 1: Open Arena,100370,30.01,0,17,0,1,0,1,2358.8,30.01,83,100,"Player Win",1793360102553
+exp_1793360075541,1,GOAP Planner AI,Scenario 1: Open Arena,100037,30.01,0,34,0,1,0,6,2124.4,30.01,66,100,"Player Win",1793360103592
+exp_1793360075541,2,GOAP Planner AI,Scenario 1: Open Arena,100074,30,0,34,0,1,0,6,2128.8,30,66,100,"Player Win",1793360104399
+exp_1793360075541,3,GOAP Planner AI,Scenario 1: Open Arena,100111,30,0,34,0,1,0,6,2133.8,30,66,100,"Player Win",1793360105196
+exp_1793360075541,4,GOAP Planner AI,Scenario 1: Open Arena,100148,30.01,0,51,0,1,0,6,2126.8,30.01,49,100,"Player Win",1793360106109
+exp_1793360075541,5,GOAP Planner AI,Scenario 1: Open Arena,100185,30.01,0,34,0,1,0,6,2121.3,30.01,66,100,"Player Win",1793360107122
+exp_1793360075541,6,GOAP Planner AI,Scenario 1: Open Arena,100222,30,0,34,0,1,0,6,2119.5,30,66,100,"Player Win",1793360108130
+exp_1793360075541,7,GOAP Planner AI,Scenario 1: Open Arena,100259,30.01,0,34,0,1,0,6,2121.4,30.01,66,100,"Player Win",1793360109165
+exp_1793360075541,8,GOAP Planner AI,Scenario 1: Open Arena,100296,30.01,0,51,0,1,0,6,2129.8,30.01,49,100,"Player Win",1793360110073
+exp_1793360075541,9,GOAP Planner AI,Scenario 1: Open Arena,100333,30,0,34,0,1,0,6,2131.9,30,66,100,"Player Win",1793360110866
+exp_1793360075541,10,GOAP Planner AI,Scenario 1: Open Arena,100370,30.01,0,34,0,1,0,6,2132.3,30.01,66,100,"Player Win",1793360111656
+exp_1793360075541,1,Utility AI,Scenario 1: Open Arena,100037,30,0,73,0,1,0,1,2623.9,30,27,100,"Player Win",1793360112678
+exp_1793360075541,2,Utility AI,Scenario 1: Open Arena,100074,30.01,0,73,0,1,0,1,2630,30.01,27,100,"Player Win",1793360113705
+exp_1793360075541,3,Utility AI,Scenario 1: Open Arena,100111,30.01,0,73,0,1,0,1,2626.7,30.01,27,100,"Player Win",1793360114741
+exp_1793360075541,4,Utility AI,Scenario 1: Open Arena,100148,30.01,0,73,0,1,0,1,2621.7,30.01,27,100,"Player Win",1793360115762
+exp_1793360075541,5,Utility AI,Scenario 1: Open Arena,100185,30.01,0,73,0,1,0,1,2635.7,30.01,27,100,"Player Win",1793360116573
+exp_1793360075541,6,Utility AI,Scenario 1: Open Arena,100222,30.02,0,73,0,1,0,1,2638.2,30.02,27,100,"Player Win",1793360117381
+exp_1793360075541,7,Utility AI,Scenario 1: Open Arena,100259,30.01,0,73,0,1,0,1,2626.7,30.01,27,100,"Player Win",1793360118177
+exp_1793360075541,8,Utility AI,Scenario 1: Open Arena,100296,30,0,73,0,1,0,1,2625.3,30,27,100,"Player Win",1793360118975
+exp_1793360075541,9,Utility AI,Scenario 1: Open Arena,100333,30.01,0,73,0,1,0,1,2633.3,30.01,27,100,"Player Win",1793360119790
+exp_1793360075541,10,Utility AI,Scenario 1: Open Arena,100370,30.01,0,73,0,1,0,1,2627,30.01,27,100,"Player Win",1793360120808

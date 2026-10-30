@@ -1,0 +1,51 @@
+experiment_id,trial,ai_system,map,seed,survival_time,damage_dealt,damage_received,npc_win,player_win,attacks,retreats,distance_travelled,duration,final_npc_health,final_player_health,outcome,timestamp
+exp_1793360517105,1,Simple Decision AI,Scenario 5: Healing Shrines (50% HP),100037,40.01,0,51,1,0,0,2,3217.8,40.01,83,50,"NPC Win",1793360518214
+exp_1793360517105,2,Simple Decision AI,Scenario 5: Healing Shrines (50% HP),100074,40.01,0,51,1,0,0,2,3211.2,40.01,83,50,"NPC Win",1793360519266
+exp_1793360517105,3,Simple Decision AI,Scenario 5: Healing Shrines (50% HP),100111,40.01,0,51,1,0,0,2,3211.1,40.01,83,50,"NPC Win",1793360520548
+exp_1793360517105,4,Simple Decision AI,Scenario 5: Healing Shrines (50% HP),100148,40.01,0,51,1,0,0,2,3217.1,40.01,83,50,"NPC Win",1793360521883
+exp_1793360517105,5,Simple Decision AI,Scenario 5: Healing Shrines (50% HP),100185,40.01,0,51,1,0,0,2,3201.2,40.01,83,50,"NPC Win",1793360522919
+exp_1793360517105,6,Simple Decision AI,Scenario 5: Healing Shrines (50% HP),100222,40.01,0,51,1,0,0,2,3212.2,40.01,83,50,"NPC Win",1793360524041
+exp_1793360517105,7,Simple Decision AI,Scenario 5: Healing Shrines (50% HP),100259,40.01,0,51,1,0,0,2,3200.7,40.01,83,50,"NPC Win",1793360525415
+exp_1793360517105,8,Simple Decision AI,Scenario 5: Healing Shrines (50% HP),100296,40,0,51,1,0,0,2,3227.6,40,83,50,"NPC Win",1793360526784
+exp_1793360517105,9,Simple Decision AI,Scenario 5: Healing Shrines (50% HP),100333,40.01,0,51,1,0,0,2,3198.3,40.01,83,50,"NPC Win",1793360528040
+exp_1793360517105,10,Simple Decision AI,Scenario 5: Healing Shrines (50% HP),100370,40,0,51,1,0,0,2,3219.7,40,83,50,"NPC Win",1793360529097
+exp_1793360517105,1,Behavior Tree AI,Scenario 5: Healing Shrines (50% HP),100037,40.01,0,85,0,1,0,2,3185.8,40.01,32,50,"Player Win",1793360530261
+exp_1793360517105,2,Behavior Tree AI,Scenario 5: Healing Shrines (50% HP),100074,40,0,85,0,1,0,2,3207.2,40,32,50,"Player Win",1793360531636
+exp_1793360517105,3,Behavior Tree AI,Scenario 5: Healing Shrines (50% HP),100111,40.01,0,68,0,1,0,1,3189.4,40.01,49,50,"Player Win",1793360532990
+exp_1793360517105,4,Behavior Tree AI,Scenario 5: Healing Shrines (50% HP),100148,40,16.7,108,1,0,1,3,2999.9,40,81,33,"NPC Win",1793360534373
+exp_1793360517105,5,Behavior Tree AI,Scenario 5: Healing Shrines (50% HP),100185,40.01,40.4,115,1,0,2,4,2925.5,40.01,81,10,"NPC Win",1793360535726
+exp_1793360517105,6,Behavior Tree AI,Scenario 5: Healing Shrines (50% HP),100222,40,26.9,113,1,0,1,4,3027.5,40,97,23,"NPC Win",1793360537070
+exp_1793360517105,7,Behavior Tree AI,Scenario 5: Healing Shrines (50% HP),100259,40.01,0,85,0,1,0,2,3188.4,40.01,32,50,"Player Win",1793360538449
+exp_1793360517105,8,Behavior Tree AI,Scenario 5: Healing Shrines (50% HP),100296,40.01,0,85,0,1,0,2,3191,40.01,32,50,"Player Win",1793360539784
+exp_1793360517105,9,Behavior Tree AI,Scenario 5: Healing Shrines (50% HP),100333,40.01,0,98,0,1,0,3,2941,40.01,19,50,"Player Win",1793360540875
+exp_1793360517105,10,Behavior Tree AI,Scenario 5: Healing Shrines (50% HP),100370,40,0,97,0,1,0,2,3073.6,40,39,50,"Player Win",1793360542032
+exp_1793360517105,1,Fuzzy Logic AI,Scenario 5: Healing Shrines (50% HP),100037,40.01,0,52,1,0,0,1,3071,40.01,66,50,"NPC Win",1793360543400
+exp_1793360517105,2,Fuzzy Logic AI,Scenario 5: Healing Shrines (50% HP),100074,40,0,34,1,0,0,3,3171,40,59,50,"NPC Win",1793360544564
+exp_1793360517105,3,Fuzzy Logic AI,Scenario 5: Healing Shrines (50% HP),100111,40.02,0,17,1,0,0,1,3130.6,40.02,74,50,"NPC Win",1793360545691
+exp_1793360517105,4,Fuzzy Logic AI,Scenario 5: Healing Shrines (50% HP),100148,40.01,0,34,1,0,0,3,3176.6,40.01,59,50,"NPC Win",1793360546769
+exp_1793360517105,5,Fuzzy Logic AI,Scenario 5: Healing Shrines (50% HP),100185,40.01,0,52,1,0,0,1,3045.5,40.01,70,50,"NPC Win",1793360547922
+exp_1793360517105,6,Fuzzy Logic AI,Scenario 5: Healing Shrines (50% HP),100222,40.01,0,34,1,0,0,3,3162.8,40.01,59,50,"NPC Win",1793360549289
+exp_1793360517105,7,Fuzzy Logic AI,Scenario 5: Healing Shrines (50% HP),100259,40.01,0,51,0,1,0,1,2991.7,40.01,36,50,"Player Win",1793360550657
+exp_1793360517105,8,Fuzzy Logic AI,Scenario 5: Healing Shrines (50% HP),100296,40,0,34,1,0,0,3,3165.2,40,59,50,"NPC Win",1793360551939
+exp_1793360517105,9,Fuzzy Logic AI,Scenario 5: Healing Shrines (50% HP),100333,40.01,0,52,1,0,0,1,3127,40.01,66,50,"NPC Win",1793360552990
+exp_1793360517105,10,Fuzzy Logic AI,Scenario 5: Healing Shrines (50% HP),100370,40.02,0,34,1,0,0,3,3174.8,40.02,60,50,"NPC Win",1793360554084
+exp_1793360517105,1,GOAP Planner AI,Scenario 5: Healing Shrines (50% HP),100037,40.01,0,97,0,1,0,5,2960.6,40.01,39,50,"Player Win",1793360555119
+exp_1793360517105,2,GOAP Planner AI,Scenario 5: Healing Shrines (50% HP),100074,40,0,91,0,1,0,5,2975.5,40,37,50,"Player Win",1793360556178
+exp_1793360517105,3,GOAP Planner AI,Scenario 5: Healing Shrines (50% HP),100111,40,0,99,0,1,0,5,2966.8,40,39,50,"Player Win",1793360557224
+exp_1793360517105,4,GOAP Planner AI,Scenario 5: Healing Shrines (50% HP),100148,40.01,0,91,0,1,0,5,2972.2,40.01,36,50,"Player Win",1793360558338
+exp_1793360517105,5,GOAP Planner AI,Scenario 5: Healing Shrines (50% HP),100185,40,0,98,0,1,0,5,2959.7,40,38,50,"Player Win",1793360559419
+exp_1793360517105,6,GOAP Planner AI,Scenario 5: Healing Shrines (50% HP),100222,40.01,18.4,83,1,0,1,3,2974.3,40.01,83,32,"NPC Win",1793360560727
+exp_1793360517105,7,GOAP Planner AI,Scenario 5: Healing Shrines (50% HP),100259,40.01,0,97,0,1,0,5,3020.7,40.01,35,50,"Player Win",1793360561998
+exp_1793360517105,8,GOAP Planner AI,Scenario 5: Healing Shrines (50% HP),100296,40,0,96,0,1,0,5,2957.8,40,38,50,"Player Win",1793360563078
+exp_1793360517105,9,GOAP Planner AI,Scenario 5: Healing Shrines (50% HP),100333,40.01,0,99,0,1,0,5,2968.2,40.01,40,50,"Player Win",1793360564123
+exp_1793360517105,10,GOAP Planner AI,Scenario 5: Healing Shrines (50% HP),100370,40.01,0,119,0,1,0,3,3113.3,40.01,33,50,"Player Win",1793360565229
+exp_1793360517105,1,Utility AI,Scenario 5: Healing Shrines (50% HP),100037,40,0,68,0,1,0,1,3415,40,49,50,"Player Win",1793360566338
+exp_1793360517105,2,Utility AI,Scenario 5: Healing Shrines (50% HP),100074,40.01,0,51,1,0,0,2,3470.8,40.01,100,50,"NPC Win",1793360567432
+exp_1793360517105,3,Utility AI,Scenario 5: Healing Shrines (50% HP),100111,40.02,0,68,0,1,0,1,3408.3,40.02,49,50,"Player Win",1793360568772
+exp_1793360517105,4,Utility AI,Scenario 5: Healing Shrines (50% HP),100148,40.01,0,68,1,0,0,2,3318.7,40.01,100,50,"NPC Win",1793360570164
+exp_1793360517105,5,Utility AI,Scenario 5: Healing Shrines (50% HP),100185,40.01,0,68,1,0,0,2,3318,40.01,100,50,"NPC Win",1793360571512
+exp_1793360517105,6,Utility AI,Scenario 5: Healing Shrines (50% HP),100222,40.02,0,51,1,0,0,2,3467.4,40.02,81,50,"NPC Win",1793360572617
+exp_1793360517105,7,Utility AI,Scenario 5: Healing Shrines (50% HP),100259,40.01,0,68,0,1,0,1,3418.3,40.01,49,50,"Player Win",1793360573686
+exp_1793360517105,8,Utility AI,Scenario 5: Healing Shrines (50% HP),100296,40,0,51,1,0,0,2,3390.6,40,100,50,"NPC Win",1793360575060
+exp_1793360517105,9,Utility AI,Scenario 5: Healing Shrines (50% HP),100333,40.01,0,51,1,0,0,2,3473.4,40.01,82,50,"NPC Win",1793360576264
+exp_1793360517105,10,Utility AI,Scenario 5: Healing Shrines (50% HP),100370,40,0,51,1,0,0,2,3476.3,40,82,50,"NPC Win",1793360577361
